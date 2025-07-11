@@ -1,0 +1,10 @@
+[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m92[0m - [1m🚀 Starting Sports Quest AI Backend[0m
+[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mvalidate_environment[0m:[36m61[0m - [1m✅ Environment validation passed[0m
+[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36minitialize_database[0m:[36m75[0m - [1m🗄️  Database found, skipping initialization[0m
+[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m106[0m - [1m🌐 Server configuration:[0m
+[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m107[0m - [1m   Host: 0.0.0.0[0m
+[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m108[0m - [1m   Port: 8001[0m
+[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m109[0m - [1m   Environment: development[0m
+[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m110[0m - [1m   Reload: True[0m
+[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m116[0m - [1m🎯 Starting uvicorn server...[0m
+WARNING:  You must pass the application as an import string to enable 'reload' or 'workers'.
