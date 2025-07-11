@@ -32,7 +32,7 @@ export default function HomePage() {
             <div className="flex justify-center mb-16">
               {authenticated ? (
                 <Link 
-                  href="/main"
+                  href="/onboarding"
                   className="relative inline-flex items-center justify-center px-8 py-4 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-lg transition-all duration-300 hover:scale-105"
                 >
                   Start Your Quest

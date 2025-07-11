@@ -9,6 +9,7 @@ import json
 from ...services.sportdevs_service import sportdevs_service
 from ...models.database import async_session
 from ...models.team import Team
+from ...models.user import User
 from sqlalchemy import select
 
 router = APIRouter(prefix="/api", tags=["sportdevs"])
@@ -101,27 +102,6 @@ async def update_user_preferences(user_id: str, preferences: Dict[str, Any]) -> 
         "user_id": user_id,
         "updated": True,
         "preferences": preferences
-    }
-
-
-@router.post("/users/register")
-async def register_user(user_data: Dict[str, Any]) -> Dict[str, Any]:
-    """User registration with favorite teams - PRD requirement"""
-    email = user_data.get("email")
-    password = user_data.get("password")
-    favorite_teams = user_data.get("favorite_teams", [])
-    
-    if not email or not password:
-        raise HTTPException(status_code=400, detail="email and password are required")
-    
-    # Placeholder implementation
-    user_id = f"user_{hash(email) % 10000}"
-    
-    return {
-        "user_id": user_id,
-        "email": email,
-        "favorite_teams": favorite_teams,
-        "registered": True
     }
 
 

@@ -5,8 +5,9 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from pydantic import BaseModel
-from typing import List, Optional
-from ...models.database import get_db
+from typing import List, Optional, Dict, Any
+from loguru import logger
+from ...models.database import get_db, async_session
 from ...models.user import User
 from ...models.user_team import UserTeam
 from ...models.team import Team
@@ -75,6 +76,40 @@ async def register_user(user_data: UserCreate, db: AsyncSession = Depends(get_db
         
     except Exception as e:
         await db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/register/blockchain")
+async def register_blockchain_user(user_data: Dict[str, Any]) -> Dict[str, Any]:
+    """Register a new user with blockchain address"""
+    try:
+        async with async_session() as session:
+            # Check if user with same address already exists
+            existing_user = await session.execute(
+                select(User).where(User.address == user_data["address"])
+            )
+            if existing_user.scalar_one_or_none():
+                return {
+                    "detail": "User with this address already exists",
+                    "already_exists": True
+                }
+            
+            # Create new user
+            new_user = User(
+                address=user_data["address"],
+                preferences=json.dumps({"favorite_teams": user_data.get("favorite_teams", [])})
+            )
+            session.add(new_user)
+            await session.commit()
+            
+            return {
+                "address": user_data["address"],
+                "favorite_teams": user_data.get("favorite_teams", []),
+                "registered": True
+            }
+            
+    except Exception as e:
+        logger.error(f"Error registering user: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -212,12 +247,20 @@ async def add_team_trigger(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/{user_id}/recommendations")
-async def get_team_recommendations(user_id: int, db: AsyncSession = Depends(get_db)):
+@router.get("/{address}/recommendations")
+async def get_team_recommendations(address: str, db: AsyncSession = Depends(get_db)):
     """Get team recommendations for user based on current preferences"""
     try:
+        # Get user by address
+        user_stmt = select(User).where(User.address == address)
+        user_result = await db.execute(user_stmt)
+        user = user_result.scalar_one_or_none()
+        
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
         # Get user's current teams
-        user_teams_stmt = select(UserTeam).where(UserTeam.user_id == user_id)
+        user_teams_stmt = select(UserTeam).where(UserTeam.user_id == user.id)
         user_teams_result = await db.execute(user_teams_stmt)
         user_teams = user_teams_result.scalars().all()
         user_team_ids = [ut.team_id for ut in user_teams]
@@ -244,7 +287,7 @@ async def get_team_recommendations(user_id: int, db: AsyncSession = Depends(get_
         ]
         
         return {
-            "user_id": user_id,
+            "address": address,
             "recommendations": recommendations,
             "total": len(recommendations)
         }
