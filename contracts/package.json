@@ -1,0 +1,23 @@
+{
+  "name": "chiliz-leaderboard-rewards",
+  "version": "1.0.0",
+  "description": "Smart contract for managing leaderboard rewards with FAN tokens on Chiliz",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.js --network chilizSpicy",
+    "verify": "hardhat verify --network chilizSpicy"
+  },
+  "keywords": ["chiliz", "smart-contract", "erc20", "rewards", "leaderboard"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "hardhat": "^2.17.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.0",
+    "dotenv": "^16.0.0"
+  }
+} 
