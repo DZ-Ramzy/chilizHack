@@ -1,10 +1,10 @@
 """
-Sync API endpoints - Manual synchronization with SportDevs API
+Sync API endpoints - Manual synchronization with ESPN API
 """
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel
 from typing import Dict, Any, Optional
-from ...services.sportdevs_service import sportdevs_service
+from ...services.espn_football_service import espn_football_service
 from ...services.event_scheduler import event_scheduler
 from ...tools.team_mapping import team_mapper
 from loguru import logger
@@ -21,7 +21,7 @@ class TeamSyncRequest(BaseModel):
 class ManualMappingRequest(BaseModel):
     """Request model for manual team mapping"""
     db_team_name: str
-    sportdevs_team_id: str
+    espn_team_id: str
 
 
 class SyncResponse(BaseModel):
@@ -34,7 +34,7 @@ class SyncResponse(BaseModel):
 @router.post("/teams", response_model=SyncResponse)
 async def sync_teams():
     """
-    Manually sync all teams with SportDevs API
+    Manually sync all teams with ESPN API
     """
     try:
         logger.info("Manual team sync triggered via API")
@@ -55,13 +55,13 @@ async def sync_teams():
 @router.post("/events", response_model=SyncResponse) 
 async def sync_events():
     """
-    Manually sync events for all teams in database using SportDevs API
+    Manually sync events for all teams in database using ESPN API
     """
     try:
         logger.info("Manual event sync triggered via API")
         
-        # Get leagues and teams from SportDevs
-        leagues = await sportdevs_service.get_leagues()
+        # Get leagues from ESPN
+        leagues = await espn_football_service.get_leagues()
         
         events_created = 0
         events_skipped = 0
@@ -96,7 +96,7 @@ async def full_sync():
         team_result = await team_mapper.enhanced_team_sync()
         
         # Step 2: Sync events (simplified for now)
-        leagues = await sportdevs_service.get_leagues()
+        leagues = await espn_football_service.get_leagues()
         
         result = {
             "teams_synced": len(team_result['synced']),
@@ -139,20 +139,20 @@ async def full_sync_background(background_tasks: BackgroundTasks):
 @router.post("/team", response_model=SyncResponse)
 async def sync_specific_team(request: TeamSyncRequest):
     """
-    Sync events for a specific team using SportDevs API
+    Sync events for a specific team using ESPN API
     """
     try:
         logger.info(f"Team-specific sync triggered for: {request.team_name}")
         
-        # Search for team in SportDevs
-        team_data = await sportdevs_service.search_team(request.team_name)
+        # Search for team in ESPN
+        team_data = await espn_football_service.search_team(request.team_name)
         
         if not team_data:
-            raise HTTPException(status_code=404, detail=f"Team '{request.team_name}' not found in SportDevs API")
+            raise HTTPException(status_code=404, detail=f"Team '{request.team_name}' not found in ESPN API")
         
         # Get team matches (if the endpoint works)
         try:
-            matches = await sportdevs_service.get_team_matches(team_data.get("id"))
+            matches = await espn_football_service.get_team_matches(team_data.get("id"))
             matches_count = len(matches) if matches else 0
         except Exception as e:
             logger.warning(f"Could not get matches for team {request.team_name}: {e}")
@@ -242,10 +242,10 @@ async def trigger_manual_sync():
 @router.get("/test-team/{team_name}")
 async def test_team_search(team_name: str):
     """
-    Test team search in SportDevs API (for debugging)
+    Test team search in ESPN API (for debugging)
     """
     try:
-        team_data = await sportdevs_service.search_team(team_name)
+        team_data = await espn_football_service.search_team(team_name)
         
         if not team_data:
             return {"found": False, "team_name": team_name}
@@ -253,7 +253,7 @@ async def test_team_search(team_name: str):
         return {
             "found": True,
             "team_name": team_name,
-            "sportdevs_data": {
+            "espn_data": {
                 "id": team_data.get("id"),
                 "name": team_data.get("name"),
                 "country": team_data.get("country"),
@@ -274,7 +274,7 @@ async def test_team_events(team_name: str):
     """
     try:
         # First find the team
-        team_data = await sportdevs_service.search_team(team_name)
+        team_data = await espn_football_service.search_team(team_name)
         
         if not team_data:
             return {"error": f"Team '{team_name}' not found"}
@@ -283,7 +283,7 @@ async def test_team_events(team_name: str):
         
         # Try to get team matches
         try:
-            matches = await sportdevs_service.get_team_matches(team_id)
+            matches = await espn_football_service.get_team_matches(team_id)
             matches_count = len(matches) if matches else 0
         except Exception as e:
             matches = []
@@ -292,10 +292,10 @@ async def test_team_events(team_name: str):
         
         return {
             "team": team_name,
-            "sportdevs_id": team_id,
+            "espn_id": team_id,
             "matches_count": matches_count,
             "sample_matches": matches[:3] if matches else [],
-            "note": "Matches endpoint may have issues - check SportDevs API documentation"
+            "note": "ESPN API provides comprehensive match data"
         }
         
     except Exception as e:
@@ -327,14 +327,14 @@ async def enhanced_team_sync(similarity_threshold: float = 0.7):
 @router.post("/teams/manual-mapping", response_model=SyncResponse)
 async def manual_team_mapping(request: ManualMappingRequest):
     """
-    Manually map a database team to a SportDevs team ID
+    Manually map a database team to a ESPN team ID
     """
     try:
-        logger.info(f"Manual mapping: {request.db_team_name} -> {request.sportdevs_team_id}")
+        logger.info(f"Manual mapping: {request.db_team_name} -> {request.espn_team_id}")
         
         result = await team_mapper.manual_team_mapping(
             request.db_team_name, 
-            request.sportdevs_team_id
+            request.espn_team_id
         )
         
         if not result["success"]:
@@ -353,13 +353,13 @@ async def manual_team_mapping(request: ManualMappingRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/sportdevs/leagues")
-async def get_sportdevs_leagues():
+@router.get("/espn/leagues")
+async def get_espn_leagues():
     """
-    Get all available leagues from SportDevs API
+    Get all available leagues from ESPN API
     """
     try:
-        leagues = await sportdevs_service.get_leagues()
+        leagues = await espn_football_service.get_leagues()
         
         return {
             "success": True,
@@ -373,21 +373,21 @@ async def get_sportdevs_leagues():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/sportdevs/teams")
-async def get_sportdevs_teams(limit: int = 20):
+@router.get("/espn/teams")
+async def get_espn_teams(limit: int = 20):
     """
-    Get teams from SportDevs API
+    Get teams from ESPN API
     """
     try:
-        # SportDevs doesn't have a direct "get all teams" endpoint
+        # ESPN doesn't have a direct "get all teams" endpoint
         # We'll need to implement this differently
         return {
             "success": True,
-            "message": "Use team search endpoints instead - SportDevs API requires specific team searches",
+            "message": "Use team search endpoints instead - ESPN API uses league-specific endpoints",
             "available_endpoints": [
                 "/sync/test-team/{team_name}",
                 "/teams/exists/{team_name}",
-                "/sportdevs/search/{query}"
+                "/espn/search/{query}"
             ]
         }
         
@@ -396,14 +396,14 @@ async def get_sportdevs_teams(limit: int = 20):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/sportdevs/search/{query}")
-async def search_sportdevs(query: str):
+@router.get("/espn/search/{query}")
+async def search_espn(query: str):
     """
-    Search for teams in SportDevs API
+    Search for teams in ESPN API
     """
     try:
-        team = await sportdevs_service.search_team(query)
-        exists_result = await sportdevs_service.team_exists(query)
+        team = await espn_football_service.search_team(query)
+        exists_result = await espn_football_service.team_exists(query)
         
         return {
             "query": query,

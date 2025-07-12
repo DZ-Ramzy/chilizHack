@@ -1,15 +1,15 @@
 # Sports Quest AI Backend
 
-AI-powered sports quest generation system with multi-agent architecture and SportDevs API integration.
+AI-powered sports quest generation system with multi-agent architecture and ESPN API integration.
 
 ## 🏆 Overview
 
-Sports Quest AI automatically generates personalized quests and missions based on sports events and user-supported teams, with dynamic validation and collective engagement. The system implements a complete workflow using multi-agent architecture with real-time sports data from SportDevs API.
+Sports Quest AI automatically generates personalized quests and missions based on sports events and user-supported teams, with dynamic validation and collective engagement. The system implements a complete workflow using multi-agent architecture with real-time sports data from ESPN API.
 
 ## 🚀 Key Features
 
 - **Multi-Agent Architecture**: Orchestrated AI agents for intelligent quest generation
-- **SportDevs Integration**: Real-time sports data and team information
+- **ESPN Integration**: Real-time sports data and team information
 - **Smart Team Detection**: Conditional quest creation based on team existence
 - **Quest Types**: Individual, Clash, and Collective quests
 - **Multilingual Support**: French, English, and Spanish quest generation
@@ -32,7 +32,7 @@ Orchestrator Agent
 
 ### Data Integration
 ```
-SportDevs API
+ESPN API
 ├── Team Search & Validation
 ├── Match Data Retrieval  
 ├── League Information
@@ -40,8 +40,8 @@ SportDevs API
 ```
 
 ### Workflow Logic
-1. **Sports Event Detection** → SportDevs API monitoring
-2. **Team Existence Check** → Database + SportDevs validation
+1. **Sports Event Detection** → ESPN API monitoring
+2. **Team Existence Check** → Database + ESPN validation
 3. **Conditional Quest Strategy**:
    - Both teams exist → Individual + Clash quests
    - One team exists → Individual quest only
@@ -78,7 +78,7 @@ Edit `.env` file:
 
 ```env
 # API Keys
-SPORTDEVS_API_KEY=your_sportdevs_api_key_here
+# ESPN API doesn't require API key
 
 # Database
 DATABASE_URL=sqlite+aiosqlite:///./sports_quest.db
@@ -114,9 +114,9 @@ ENVIRONMENT=development
 - `GET /api/teams/` - List teams
 - `GET /api/teams/{id}/community` - Team community info
 
-### SportDevs Integration
-- `GET /api/sync/sportdevs/leagues` - Get available leagues
-- `GET /api/sync/sportdevs/search/{query}` - Search teams
+### ESPN Integration
+- `GET /api/sync/espn/leagues` - Get available leagues
+- `GET /api/sync/espn/search/{query}` - Search teams
 - `GET /api/sync/test-team/{team_name}` - Test team search
 - `POST /api/sync/teams/enhanced` - Enhanced team synchronization
 
@@ -157,7 +157,7 @@ curl -X POST "http://localhost:8000/api/users/register" \
 curl "http://localhost:8000/api/teams/exists/PSG"
 ```
 
-### 4. Sync with SportDevs API
+### 4. Sync with ESPN API
 
 ```bash
 curl -X POST "http://localhost:8000/api/sync/teams/enhanced"
@@ -171,7 +171,7 @@ curl -X POST "http://localhost:8000/api/sync/teams/enhanced"
 - Implements conditional logic based on team existence
 
 ### Team Checker Agent  
-- Validates team existence in database and SportDevs API
+- Validates team existence in database and ESPN API
 - Returns team metadata and community size
 - Enables conditional quest creation logic
 
@@ -214,7 +214,7 @@ curl -X POST "http://localhost:8000/api/sync/teams/enhanced"
 ### Scenario A: Both Teams Exist
 ```
 Event: "PSG vs Real Madrid"
-→ SportDevs Check: PSG ✓, Real Madrid ✓
+→ ESPN Check: PSG ✓, Real Madrid ✓
 → Quest Creation: 
   - Individual PSG quest → PSG community (in user's language)
   - Individual Real quest → Real community (in user's language)
@@ -225,7 +225,7 @@ Event: "PSG vs Real Madrid"
 ### Scenario B: One Team Exists  
 ```
 Event: "PSG vs Unknown Team"
-→ SportDevs Check: PSG ✓, Unknown ✗
+→ ESPN Check: PSG ✓, Unknown ✗
 → Quest Creation: Only PSG quest → PSG community
 → No clash quest created
 ```
@@ -236,7 +236,7 @@ The system includes sample data:
 - **Teams**: PSG, Real Madrid, Barcelona, Bayern Munich, Manchester United
 - **Users**: psg_fan_1 (FR), real_madrid_fan (ES), multi_team_fan (EN)
 - **Events**: PSG vs Real Madrid, Barcelona vs Bayern Munich
-- **SportDevs Integration**: 5/5 teams synchronized, 50 leagues available
+- **ESPN Integration**: 5/5 teams synchronized, 50 leagues available
 
 ## 📁 Project Structure
 
@@ -249,17 +249,17 @@ src/
 │   ├── validation_agents.py # Quality validation
 │   └── distribution_agent.py # Community distribution
 ├── models/              # Database models
-│   ├── team.py         # Team model with SportDevs integration
+│   ├── team.py         # Team model with ESPN integration
 │   ├── event.py        # Events with source tracking
 │   ├── user.py         # User preferences and language
 │   └── quest.py        # Multilingual quest storage
 ├── services/           # External API integrations
-│   ├── sportdevs_service.py # SportDevs API client
+│   ├── espn_service.py # ESPN API client
 │   └── database_integration.py # Complete DB operations
 ├── tools/              # Utilities and helpers
 │   ├── quest_tools.py  # Multilingual quest generation
 │   ├── database_tools.py # Database operations
-│   └── team_mapping.py # SportDevs team synchronization
+│   └── team_mapping.py # ESPN team synchronization
 ├── api/                # FastAPI endpoints
 └── core/               # Initialization and workflow
 ```
@@ -274,7 +274,7 @@ python tests/test_complete_integration.py
 # Test agent system functionality  
 python tests/test_agents_system.py
 
-# Test SportDevs API connectivity
+# Test ESPN API connectivity
 python tests/test_working_api.py
 ```
 
@@ -292,15 +292,15 @@ curl -X POST "http://localhost:8000/api/workflow/trigger-event-sync" \
 ## 🔧 Development
 
 - **Framework**: FastAPI + SQLAlchemy (async)
-- **Database**: SQLite with SportDevs API integration
+- **Database**: SQLite with ESPN API integration
 - **AI**: Multi-agent architecture with intelligent orchestration
-- **APIs**: SportDevs Football API for real-time sports data
+- **APIs**: ESPN Football API for real-time sports data
 - **Languages**: Python 3.11+ with async/await patterns
 
 ## 📈 System Status
 
 ### ✅ Completed Features
-- [x] SportDevs API integration (100% functional)
+- [x] ESPN API integration (100% functional)
 - [x] Multi-agent quest generation system
 - [x] Multilingual support (FR/EN/ES)
 - [x] Database integration with external IDs
@@ -310,7 +310,7 @@ curl -X POST "http://localhost:8000/api/workflow/trigger-event-sync" \
 - [x] Complete REST API endpoints
 
 ### 🎯 Integration Results
-- **SportDevs API**: 100% operational
+- **ESPN API**: 100% operational
 - **Team Synchronization**: 5/5 teams synced
 - **Quest Generation**: 3 types (Individual/Clash/Collective)
 - **Languages**: 3 languages fully supported
@@ -320,7 +320,7 @@ curl -X POST "http://localhost:8000/api/workflow/trigger-event-sync" \
 ## 🚀 Production Readiness
 
 The system is **production-ready** with:
-- ✅ Complete SportDevs API integration
+- ✅ Complete ESPN API integration
 - ✅ Robust multi-agent architecture  
 - ✅ Multilingual quest generation
 - ✅ Database synchronization

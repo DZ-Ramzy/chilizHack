@@ -27,7 +27,7 @@ class SportsEvent(Base):
     
     # External data
     external_id = Column(String(100), nullable=True)  # ID from sports API
-    source = Column(String(50), default="sportdevs")  # Source of the event data
+    source = Column(String(50), default="espn")  # Source of the event data
     event_metadata = Column(Text, nullable=True)  # JSON string for additional event data
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())

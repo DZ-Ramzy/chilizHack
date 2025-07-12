@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from pydantic import BaseModel
 from typing import List, Optional
+from datetime import datetime
 from ...models.database import get_db
 from ...models.quest import Quest, QuestType, QuestStatus
 from ...models.team import Team
@@ -32,6 +33,81 @@ class QuestResponse(BaseModel):
         from_attributes = True
 
 
+@router.get("/")
+async def get_all_quests(
+    status: Optional[str] = None,
+    quest_type: Optional[str] = None,
+    team_id: Optional[int] = None,
+    skip: int = 0,
+    limit: int = 100,
+    db: AsyncSession = Depends(get_db)
+):
+    """Get all quests with optional filtering"""
+    try:
+        stmt = select(Quest).options(selectinload(Quest.team))
+        
+        if status:
+            stmt = stmt.where(Quest.status == QuestStatus(status))
+        if quest_type:
+            stmt = stmt.where(Quest.quest_type == QuestType(quest_type))
+        if team_id:
+            stmt = stmt.where(Quest.team_id == team_id)
+            
+        stmt = stmt.offset(skip).limit(limit).order_by(Quest.created_at.desc())
+        
+        result = await db.execute(stmt)
+        quests = result.scalars().all()
+        
+        quest_data = []
+        total_xp_available = 0
+        
+        for quest in quests:
+            # Extract rewards and XP from metadata
+            metadata = json.loads(quest.quest_metadata) if quest.quest_metadata else {}
+            rewards = metadata.get("rewards", {})
+            
+            xp_reward = rewards.get("points", quest.target_value * 10)  # Default XP calculation
+            points_reward = rewards.get("points", quest.target_value * 5)
+            badges = rewards.get("badges", [])
+            difficulty = metadata.get("difficulty", "medium")
+            
+            total_xp_available += xp_reward
+            
+            quest_data.append({
+                "id": quest.id,
+                "title": quest.title,
+                "description": quest.description,
+                "quest_type": quest.quest_type.value,
+                "status": quest.status.value,
+                "team_name": quest.team.name,
+                "team_id": quest.team.id,
+                "user_id": quest.user_id,
+                "target_metric": quest.target_metric,
+                "target_value": quest.target_value,
+                "current_progress": quest.current_progress,
+                "xp_reward": xp_reward,
+                "points_reward": points_reward,
+                "badges": badges,
+                "difficulty": difficulty,
+                "created_at": quest.created_at.isoformat(),
+                "metadata": metadata
+            })
+            
+        return {
+            "quests": quest_data,
+            "total": len(quest_data),
+            "total_xp_available": total_xp_available,
+            "filters": {
+                "status": status,
+                "quest_type": quest_type,
+                "team_id": team_id
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/{user_id}")
 async def get_user_quests(
     user_id: int,
@@ -52,7 +128,20 @@ async def get_user_quests(
         quests = result.scalars().all()
         
         quest_data = []
+        total_xp_available = 0
+        
         for quest in quests:
+            # Extract rewards and XP from metadata
+            metadata = json.loads(quest.quest_metadata) if quest.quest_metadata else {}
+            rewards = metadata.get("rewards", {})
+            
+            xp_reward = rewards.get("points", quest.target_value * 10)  # Default XP calculation
+            points_reward = rewards.get("points", quest.target_value * 5)
+            badges = rewards.get("badges", [])
+            difficulty = metadata.get("difficulty", "medium")
+            
+            total_xp_available += xp_reward
+            
             quest_data.append({
                 "id": quest.id,
                 "title": quest.title,
@@ -63,181 +152,241 @@ async def get_user_quests(
                 "target_metric": quest.target_metric,
                 "target_value": quest.target_value,
                 "current_progress": quest.current_progress,
-                "metadata": json.loads(quest.metadata) if quest.metadata else {}
+                "xp_reward": xp_reward,
+                "points_reward": points_reward,
+                "badges": badges,
+                "difficulty": difficulty,
+                "metadata": metadata
             })
             
         return {
             "user_id": user_id,
             "quests": quest_data,
-            "total": len(quest_data)
+            "total": len(quest_data),
+            "total_xp_available": total_xp_available
         }
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/validate")
-async def validate_quest_content(
-    quest_id: int,
-    content: str,
-    db: AsyncSession = Depends(get_db)
-):
-    """Automatic quest content validation"""
+
+
+class QuestGenerationRequest(BaseModel):
+    home_team: str
+    away_team: str
+    event_title: str
+    event_date: str
+    sport: str = "football"
+    league: Optional[str] = None
+    event_id: Optional[int] = None
+
+
+@router.get("/test/individual")
+async def test_individual_agent(db: AsyncSession = Depends(get_db)):
+    """Test individual quest agent"""
     try:
-        # Get quest details
-        stmt = select(Quest).options(selectinload(Quest.team)).where(Quest.id == quest_id)
-        result = await db.execute(stmt)
-        quest = result.scalar_one_or_none()
-        
-        if not quest:
-            raise HTTPException(status_code=404, detail="Quest not found")
-        
-        # Import validation agents
-        from ...agents.validation_agents import content_validator_agent
+        from ...ai_agents.individual_quest_agent import individual_quest_agent
         from agents import Runner
         
-        # Run validation through agent
-        validation_input = {
-            "content": content,
-            "team_name": quest.team.name,
-            "quest_type": quest.quest_type.value
-        }
+        prompt = "Create a social quest for team_id: 1, team_name: PSG, quest_type: social"
         
-        result = await Runner.run(
-            content_validator_agent,
-            input=f"Validate this quest content: {json.dumps(validation_input)}"
-        )
+        run_result = await Runner.run(individual_quest_agent, input=prompt)
+        
+        if hasattr(run_result, 'final_output') and run_result.final_output:
+            result_data = run_result.final_output.model_dump()
+        else:
+            result_data = {"message": "No final output available", "raw_result": str(run_result)}
+            
+        return {"success": True, "result": result_data}
+        
+    except Exception as e:
+        import traceback
+        return {"success": False, "error": str(e), "traceback": traceback.format_exc()}
+
+
+@router.get("/test/clash")
+async def test_clash_agent(db: AsyncSession = Depends(get_db)):
+    """Test clash quest agent"""
+    try:
+        from ...ai_agents.clash_quest_agent import clash_quest_agent
+        from agents import Runner
+        
+        prompt = "Create clash battle: home_team_id: 1, home_team_name: PSG, away_team_id: 2, away_team_name: Real Madrid, match_date: 2025-07-20T20:00:00Z"
+        
+        run_result = await Runner.run(clash_quest_agent, input=prompt)
+        
+        if hasattr(run_result, 'final_output') and run_result.final_output:
+            result_data = run_result.final_output.model_dump()
+        else:
+            result_data = {"message": "No final output available", "raw_result": str(run_result)}
+            
+        return {"success": True, "result": result_data}
+        
+    except Exception as e:
+        import traceback
+        return {"success": False, "error": str(e), "traceback": traceback.format_exc()}
+
+
+@router.get("/test/collective")
+async def test_collective_agent(db: AsyncSession = Depends(get_db)):
+    """Test collective quest agent"""
+    try:
+        from ...ai_agents.collective_quest_agent import collective_quest_agent
+        from agents import Runner
+        
+        prompt = "Create community quest: participating_team_ids: [1,2,3], participating_team_names: [PSG,Real Madrid,Barcelona], event_title: Champions League Final, event_significance: final"
+        
+        run_result = await Runner.run(collective_quest_agent, input=prompt)
+        
+        if hasattr(run_result, 'final_output') and run_result.final_output:
+            result_data = run_result.final_output.model_dump()
+        else:
+            result_data = {"message": "No final output available", "raw_result": str(run_result)}
+            
+        return {"success": True, "result": result_data}
+        
+    except Exception as e:
+        import traceback
+        return {"success": False, "error": str(e), "traceback": traceback.format_exc()}
+
+
+@router.get("/test/orchestrator")
+async def test_orchestrator_agent(db: AsyncSession = Depends(get_db)):
+    """Test quest orchestrator agent"""
+    try:
+        from ...ai_agents.quest_orchestrator_agent import quest_orchestrator_agent
+        from agents import Runner
+        
+        prompt = "Plan quest generation: available_teams: [PSG,Real Madrid,Barcelona,Manchester United,Bayern Munich], upcoming_matches: [PSG vs Real Madrid, Barcelona vs Bayern Munich], event_significance: important"
+        
+        run_result = await Runner.run(quest_orchestrator_agent, input=prompt)
+        
+        if hasattr(run_result, 'final_output') and run_result.final_output:
+            result_data = run_result.final_output.model_dump()
+        else:
+            result_data = {"message": "No final output available", "raw_result": str(run_result)}
+            
+        return {"success": True, "result": result_data}
+        
+    except Exception as e:
+        import traceback
+        return {"success": False, "error": str(e), "traceback": traceback.format_exc()}
+
+
+@router.get("/generate/all")
+async def generate_all_quests(db: AsyncSession = Depends(get_db)):
+    """Generate multiple quests for all active teams with Individual, Clash, and Collective types"""
+    try:
+        from ...tools.database_tools import get_all_active_teams
+        
+        # Get all active teams first
+        all_teams = await get_all_active_teams()
+        
+        if not all_teams:
+            return {
+                "success": False,
+                "message": "No active teams found",
+                "total_quests_created": 0
+            }
         
         return {
-            "quest_id": quest_id,
-            "validation_result": result.to_input_list(),
-            "status": "validated"
+            "success": True,
+            "total_teams_found": len(all_teams),
+            "teams": all_teams,
+            "message": "Found teams, agents disabled for testing"
         }
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/conditional-create")
-async def conditional_create_quest(
-    team_name: str,
-    event_title: str,
-    event_date: str,
+@router.post("/generate")
+async def generate_quest(
+    request: QuestGenerationRequest,
     db: AsyncSession = Depends(get_db)
 ):
-    """Create quests based on team existence (core logic from PRD)"""
+    """Generate quests based on event data using quest generator agent"""
     try:
-        # Import workflow
-        from ...core.workflow_engine import sports_quest_workflow
+        # Import quest generator agent and runner
+        from ...ai_agents.quest_generator import quest_generator_agent
+        from ...tools.database_tools import check_team_exists
+        from agents import Runner
         
-        # Create event data
-        event_data = {
-            "title": event_title,
-            "home_team": {"name": team_name},
-            "away_team": {"name": "TBD"},
-            "event_date": event_date,
-            "sport": "football"
-        }
+        # Check team existence BEFORE running the agent
+        home_team_result = await check_team_exists(request.home_team)
+        away_team_result = await check_team_exists(request.away_team)
         
-        # Process through workflow
-        result = await sports_quest_workflow.process_sports_event(event_data)
+        home_exists = home_team_result["exists"]
+        away_exists = away_team_result["exists"]
+        
+        # Determine strategy based on team existence
+        if not home_exists and not away_exists:
+            return {
+                "event_title": request.event_title,
+                "teams": f"{request.home_team} vs {request.away_team}",
+                "result": {
+                    "success": False,
+                    "strategy": "Check if home and away teams exist for quest generation.",
+                    "event_title": request.event_title,
+                    "teams_found": {
+                        "home": False,
+                        "away": False
+                    },
+                    "individual_quests": [],
+                    "clash_quests": [],
+                    "collective_quests": [],
+                    "total_quests_created": 0,
+                    "message": "Neither home nor away team has been found. Unable to create any quests."
+                },
+                "status": "quest_generation_completed"
+            }
+        
+        # Prepare event data for the agent with only existing teams
+        strategy = "both_teams" if home_exists and away_exists else ("home_only" if home_exists else "away_only")
+        
+        event_prompt = f"""
+        Generate quests for this sports event with strategy: {strategy}
+        - Event: {request.event_title}
+        - Home Team: {request.home_team} (exists: {home_exists}, id: {home_team_result.get('team_id', 'N/A')})
+        - Away Team: {request.away_team} (exists: {away_exists}, id: {away_team_result.get('team_id', 'N/A')})
+        - Date: {request.event_date}
+        - Sport: {request.sport}
+        - League: {request.league or 'N/A'}
+        - Event ID: {request.event_id}
+        
+        Create quests only for existing teams. Use the provided team IDs.
+        Return a structured QuestGenerationResult with strategy: {strategy}.
+        """
+        
+        # Run quest generator agent
+        run_result = await Runner.run(
+            quest_generator_agent,
+            input=event_prompt
+        )
+        
+        # Extract the final result from RunResult
+        if hasattr(run_result, 'final_output'):
+            agent_output = run_result.final_output
+        else:
+            agent_output = run_result
+        
+        # Convert result to dict if it's a Pydantic model
+        if hasattr(agent_output, 'model_dump'):
+            result_data = agent_output.model_dump()
+        elif hasattr(agent_output, 'dict'):
+            result_data = agent_output.dict()
+        else:
+            result_data = {"message": str(agent_output)}
         
         return {
-            "team_name": team_name,
-            "event_title": event_title,
-            "creation_result": result,
-            "logic_applied": "conditional_creation_based_on_team_existence"
+            "event_title": request.event_title,
+            "teams": f"{request.home_team} vs {request.away_team}",
+            "result": result_data,
+            "status": "quest_generation_completed"
         }
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/clash/{team1}vs{team2}")
-async def get_clash_quest(
-    team1: str,
-    team2: str,
-    db: AsyncSession = Depends(get_db)
-):
-    """Fetch clash quest between two teams"""
-    try:
-        # Find teams
-        team1_stmt = select(Team).where(Team.name.ilike(f"%{team1}%"))
-        team1_result = await db.execute(team1_stmt)
-        team1_obj = team1_result.scalar_one_or_none()
-        
-        team2_stmt = select(Team).where(Team.name.ilike(f"%{team2}%"))
-        team2_result = await db.execute(team2_stmt)
-        team2_obj = team2_result.scalar_one_or_none()
-        
-        if not team1_obj or not team2_obj:
-            raise HTTPException(status_code=404, detail="One or both teams not found")
-        
-        # Find clash quests
-        clash_stmt = select(Quest).options(selectinload(Quest.team)).where(
-            Quest.quest_type == QuestType.CLASH,
-            Quest.team_id.in_([team1_obj.id, team2_obj.id])
-        )
-        clash_result = await db.execute(clash_stmt)
-        clash_quests = clash_result.scalars().all()
-        
-        clash_data = []
-        for quest in clash_quests:
-            metadata = json.loads(quest.metadata) if quest.metadata else {}
-            clash_data.append({
-                "id": quest.id,
-                "title": quest.title,
-                "description": quest.description,
-                "team_name": quest.team.name,
-                "team_id": quest.team.id,
-                "opponent_team_id": metadata.get("opponent_team_id"),
-                "current_progress": quest.current_progress,
-                "target_value": quest.target_value,
-                "status": quest.status.value
-            })
-        
-        return {
-            "clash": f"{team1}vs{team2}",
-            "team1": team1_obj.name,
-            "team2": team2_obj.name,
-            "quests": clash_data,
-            "active_clash": len(clash_data) > 0
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/collective/{quest_id}/progress")
-async def get_collective_progress(quest_id: int, db: AsyncSession = Depends(get_db)):
-    """Real-time collective progress bar"""
-    try:
-        stmt = select(Quest).options(selectinload(Quest.team)).where(
-            Quest.id == quest_id,
-            Quest.quest_type == QuestType.COLLECTIVE
-        )
-        result = await db.execute(stmt)
-        quest = result.scalar_one_or_none()
-        
-        if not quest:
-            raise HTTPException(status_code=404, detail="Collective quest not found")
-        
-        # Calculate progress percentage
-        progress_percentage = (
-            (quest.current_progress / quest.target_value * 100) 
-            if quest.target_value else 0
-        )
-        
-        return {
-            "quest_id": quest_id,
-            "title": quest.title,
-            "current_progress": quest.current_progress,
-            "target_value": quest.target_value,
-            "progress_percentage": min(progress_percentage, 100),
-            "status": quest.status.value,
-            "team_name": quest.team.name,
-            "real_time_update": True
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))

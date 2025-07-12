@@ -15,7 +15,7 @@ class Team(Base):
     country = Column(String(50), nullable=True)
     logo_url = Column(String(255), nullable=True)
     is_active = Column(Boolean, default=True)
-    external_id = Column(String(50), nullable=True, index=True)  # SportDevs API ID
+    external_id = Column(String(50), nullable=True, index=True)  # ESPN API ID
     team_metadata = Column(Text, nullable=True)  # JSON string for additional team data
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())

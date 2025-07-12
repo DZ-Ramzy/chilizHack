@@ -3,7 +3,7 @@
 Sports Quest AI Backend - Main Application Entry Point
 
 A production-ready FastAPI application with multi-agent architecture
-for AI-powered sports quest generation with SportDevs API integration.
+for AI-powered sports quest generation with ESPN API integration.
 """
 import uvicorn
 import os

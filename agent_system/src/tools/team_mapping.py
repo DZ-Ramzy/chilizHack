@@ -1,8 +1,8 @@
 """
-Team Mapping Tools - Enhanced mapping between database teams and SportDevs API
+Team Mapping Tools - Enhanced mapping between database teams and ESPN API
 """
 from typing import Dict, List, Optional, Tuple
-from ..services.sportdevs_service import sportdevs_service
+from ..services.espn_football_service import espn_football_service
 from ..models.database import async_session
 from ..models.team import Team
 from sqlalchemy import select
@@ -119,7 +119,7 @@ class TeamMapper:
         return best_match, best_score
     
     async def enhanced_team_sync(self, similarity_threshold: float = 0.7) -> Dict:
-        """Enhanced team synchronization with SportDevs API"""
+        """Enhanced team synchronization with ESPN API"""
         results = {
             "synced": [],
             "failed": [],
@@ -145,8 +145,8 @@ class TeamMapper:
                 try:
                     logger.info(f"Processing team: {team.name}")
                     
-                    # Search in SportDevs API
-                    api_team = await sportdevs_service.search_team(team.name)
+                    # Search in ESPN API
+                    api_team = await espn_football_service.search_team(team.name)
                     
                     if api_team:
                         # Calculate similarity score
@@ -164,10 +164,10 @@ class TeamMapper:
                             results["statistics"]["low_confidence"] += 1
                         
                         if score >= similarity_threshold:
-                            # Update team with SportDevs data
+                            # Update team with ESPN data
                             metadata = {
-                                "sportdevs_id": api_team.get("id"),
-                                "sportdevs_name": api_team.get("name"),
+                                "espn_id": api_team.get("id"),
+                                "espn_name": api_team.get("name"),
                                 "match_score": score,
                                 "category": category,
                                 "country": api_team.get("country"),
@@ -205,7 +205,7 @@ class TeamMapper:
                         results["statistics"]["not_found"] += 1
                         results["failed"].append({
                             "team": team.name,
-                            "reason": "No match found in SportDevs API"
+                            "reason": "No match found in ESPN API"
                         })
                         logger.warning(f"No match found for: {team.name}")
                 
@@ -220,8 +220,8 @@ class TeamMapper:
         
         return results
     
-    async def manual_team_mapping(self, db_team_name: str, sportdevs_team_id: str) -> Dict:
-        """Manually map a team to a SportDevs team ID"""
+    async def manual_team_mapping(self, db_team_name: str, espn_team_id: str) -> Dict:
+        """Manually map a team to an ESPN team ID"""
         async with async_session() as session:
             try:
                 # Find the database team
@@ -232,16 +232,16 @@ class TeamMapper:
                 if not team:
                     return {"success": False, "error": f"Team '{db_team_name}' not found in database"}
                 
-                # Check if team exists in SportDevs by searching for it
-                api_team = await sportdevs_service.search_team(db_team_name)
+                # Check if team exists in ESPN by searching for it
+                api_team = await espn_football_service.search_team(db_team_name)
                 
-                if not api_team or str(api_team.get("id")) != sportdevs_team_id:
-                    return {"success": False, "error": f"SportDevs team ID {sportdevs_team_id} not found or doesn't match"}
+                if not api_team or str(api_team.get("id")) != espn_team_id:
+                    return {"success": False, "error": f"ESPN team ID {espn_team_id} not found or doesn't match"}
                 
                 # Update team
                 metadata = {
-                    "sportdevs_id": api_team.get("id"),
-                    "sportdevs_name": api_team.get("name"),
+                    "espn_id": api_team.get("id"),
+                    "espn_name": api_team.get("name"),
                     "manual_mapping": True,
                     "country": api_team.get("country"),
                     "founded": api_team.get("founded"),

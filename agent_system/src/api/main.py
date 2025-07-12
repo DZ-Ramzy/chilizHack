@@ -10,8 +10,7 @@ import os
 from dotenv import load_dotenv
 
 from ..models.database import init_db, get_db
-from .routes import users, teams, quests, events, workflow, sync, sportdevs
-from ..core.workflow_engine import sports_quest_workflow
+from .routes import users, teams, quests, events, sync, espn
 
 load_dotenv()
 
@@ -21,14 +20,14 @@ async def lifespan(app: FastAPI):
     # Initialize database on startup
     await init_db()
     
-    # Start event scheduler on startup
-    from ..services.event_scheduler import start_event_scheduler, stop_event_scheduler
-    await start_event_scheduler()
+    # Start event scheduler on startup (disabled to avoid rate limiting)
+    # from ..services.event_scheduler import start_event_scheduler, stop_event_scheduler
+    # await start_event_scheduler()
     
     yield
     
     # Stop event scheduler on shutdown
-    await stop_event_scheduler()
+    # await stop_event_scheduler()
 
 
 app = FastAPI(
@@ -52,9 +51,8 @@ app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(teams.router, prefix="/api/teams", tags=["teams"])  
 app.include_router(quests.router, prefix="/api/quests", tags=["quests"])
 app.include_router(events.router, prefix="/api/events", tags=["events"])
-app.include_router(workflow.router, prefix="/api/workflow", tags=["workflow"])
 app.include_router(sync.router, prefix="/api/sync", tags=["sync"])
-app.include_router(sportdevs.router, tags=["sportdevs"])
+app.include_router(espn.router, tags=["espn"])
 
 
 @app.get("/")
@@ -73,7 +71,8 @@ async def health_check(db: AsyncSession = Depends(get_db)):
     """Health check endpoint"""
     try:
         # Test database connection
-        await db.execute("SELECT 1")
+        from sqlalchemy import text
+        await db.execute(text("SELECT 1"))
         return {
             "status": "healthy",
             "database": "connected",

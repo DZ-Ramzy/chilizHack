@@ -1,25 +1,25 @@
 """
-SportDevs API Routes - REST endpoints for SportDevs Football API integration
+ESPN Football API Routes - REST endpoints for ESPN Football API integration
 """
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Dict, Any, List, Optional
 from loguru import logger
 import json
 
-from ...services.sportdevs_service import sportdevs_service
+from ...services.espn_football_service import espn_football_service
 from ...models.database import async_session
 from ...models.team import Team
 from ...models.user import User
 from sqlalchemy import select
 
-router = APIRouter(prefix="/api", tags=["sportdevs"])
+router = APIRouter(prefix="/api", tags=["espn"])
 
 
 @router.get("/teams/exists/{team_name}")
 async def check_team_exists(team_name: str) -> Dict[str, Any]:
-    """Check if team exists in SportDevs API - PRD requirement"""
+    """Check if team exists in ESPN API - PRD requirement"""
     try:
-        result = await sportdevs_service.team_exists(team_name)
+        result = await espn_football_service.team_exists(team_name)
         return result
     except Exception as e:
         logger.error(f"Error checking team existence: {e}")
@@ -37,8 +37,8 @@ async def conditional_create_quest(event_data: Dict[str, Any]) -> Dict[str, Any]
             raise HTTPException(status_code=400, detail="home_team and away_team are required")
         
         # Check if teams exist in our system
-        home_exists = await sportdevs_service.team_exists(home_team)
-        away_exists = await sportdevs_service.team_exists(away_team)
+        home_exists = await espn_football_service.team_exists(home_team)
+        away_exists = await espn_football_service.team_exists(away_team)
         
         created_quests = []
         
@@ -146,24 +146,36 @@ async def validate_quest(quest_data: Dict[str, Any]) -> Dict[str, Any]:
 async def generate_team_missions(team_id: str) -> Dict[str, Any]:
     """Generate missions for team events - PRD requirement"""
     try:
-        # Get team info from SportDevs
-        team_data = await sportdevs_service.get_team_by_id(int(team_id))
+        # Find team by ID in our mappings
+        team_name = None
+        league = None
+        for name, mapping in espn_football_service.team_mappings.items():
+            if mapping["id"] == team_id:
+                team_name = name
+                league = mapping["league"]
+                break
+        
+        if not team_name:
+            raise HTTPException(status_code=404, detail=f"Team {team_id} not found in mappings")
+        
+        # Get team info from ESPN
+        team_data = await espn_football_service.get_team_by_id(team_id, league)
         
         if not team_data:
-            raise HTTPException(status_code=404, detail=f"Team {team_id} not found")
+            raise HTTPException(status_code=404, detail=f"Team {team_id} not found in ESPN")
         
         # Get upcoming matches for this team
-        matches = await sportdevs_service.get_team_matches(int(team_id))
+        matches = await espn_football_service.get_team_matches(team_name)
         
         missions = []
         for match in matches[:3]:  # Limit to next 3 matches
             missions.append({
                 "id": f"mission_{match['id']}",
-                "title": f"Support {team_data['name']} in {match.get('home_name')} vs {match.get('away_name')}",
+                "title": f"Support {team_name} in upcoming match",
                 "type": "pre_match",
-                "match_id": match["id"],
-                "match_date": match["date"],
-                "opponent": match.get("away_name") if team_data["name"] == match.get("home_name") else match.get("home_name"),
+                "match_id": match.get("id", "unknown"),
+                "match_date": match.get("date", "TBD"),
+                "opponent": "TBD",
                 "tasks": [
                     "Share team lineup predictions",
                     "Post pre-match excitement",
@@ -173,7 +185,7 @@ async def generate_team_missions(team_id: str) -> Dict[str, Any]:
         
         return {
             "team_id": team_id,
-            "team_name": team_data["name"],
+            "team_name": team_name,
             "missions_generated": len(missions),
             "missions": missions
         }
@@ -187,9 +199,9 @@ async def generate_team_missions(team_id: str) -> Dict[str, Any]:
 
 @router.get("/sync/test-team/{team_name}")
 async def test_team_search(team_name: str) -> Dict[str, Any]:
-    """Test team search in SportDevs API"""
+    """Test team search in ESPN API"""
     try:
-        team = await sportdevs_service.search_team(team_name)
+        team = await espn_football_service.search_team(team_name)
         
         if team:
             return {
@@ -207,7 +219,7 @@ async def test_team_search(team_name: str) -> Dict[str, Any]:
             return {
                 "found": False,
                 "team_name": team_name,
-                "message": f"Team '{team_name}' not found in SportDevs API"
+                "message": f"Team '{team_name}' not found in ESPN API"
             }
             
     except Exception as e:
@@ -220,7 +232,7 @@ async def test_team_matches(team_name: str) -> Dict[str, Any]:
     """Test getting matches for a team"""
     try:
         # First find the team
-        team = await sportdevs_service.search_team(team_name)
+        team = await espn_football_service.search_team(team_name)
         
         if not team:
             return {
@@ -230,7 +242,7 @@ async def test_team_matches(team_name: str) -> Dict[str, Any]:
             }
         
         # Get upcoming matches
-        matches = await sportdevs_service.get_team_matches(team["id"])
+        matches = await espn_football_service.get_team_matches(team["id"])
         
         return {
             "found": True,
@@ -246,10 +258,10 @@ async def test_team_matches(team_name: str) -> Dict[str, Any]:
 
 
 @router.post("/sync/teams")
-async def sync_teams_with_sportdevs() -> Dict[str, Any]:
-    """Sync database teams with SportDevs API"""
+async def sync_teams_with_espn() -> Dict[str, Any]:
+    """Sync database teams with ESPN API"""
     try:
-        result = await sportdevs_service.sync_teams_with_database()
+        result = await espn_football_service.sync_teams_with_database()
         return result
     except Exception as e:
         logger.error(f"Error syncing teams: {e}")
@@ -257,11 +269,11 @@ async def sync_teams_with_sportdevs() -> Dict[str, Any]:
 
 
 @router.post("/sync/events")
-async def sync_events_from_sportdevs() -> Dict[str, Any]:
-    """Sync events from SportDevs API"""
+async def sync_events_from_espn() -> Dict[str, Any]:
+    """Sync events from ESPN API"""
     try:
-        upcoming_events = await sportdevs_service.fetch_upcoming_events_for_db_teams()
-        create_result = await sportdevs_service.create_events_from_api_data(upcoming_events)
+        upcoming_events = await espn_football_service.fetch_upcoming_events_for_db_teams()
+        create_result = await espn_football_service.create_events_from_api_data(upcoming_events)
         
         return {
             "events_fetched": len(upcoming_events),
@@ -280,7 +292,7 @@ async def sync_events_from_sportdevs() -> Dict[str, Any]:
 async def full_sync_and_quest_generation() -> Dict[str, Any]:
     """Full sync with quest generation - main workflow"""
     try:
-        result = await sportdevs_service.sync_events_and_trigger_quests()
+        result = await espn_football_service.sync_events_and_trigger_quests()
         return result
     except Exception as e:
         logger.error(f"Error in full sync: {e}")

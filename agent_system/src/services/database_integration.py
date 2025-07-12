@@ -1,5 +1,5 @@
 """
-Database Integration Service for SportDevs - Complete DB operations
+Database Integration Service for ESPN - Complete DB operations
 """
 import asyncio
 from typing import List, Dict, Any, Optional
@@ -12,17 +12,17 @@ from ..models.team import Team
 from ..models.event import SportsEvent
 from ..models.user import User
 from ..models.quest import Quest
-from .sportdevs_service import sportdevs_service
+from .espn_football_service import espn_football_service
 
 
 class DatabaseIntegrationService:
-    """Service for complete database integration with SportDevs API"""
+    """Service for complete database integration with ESPN API"""
     
     def __init__(self):
-        self.sportdevs = sportdevs_service
+        self.espn = espn_football_service
     
     async def sync_teams_with_external_ids(self) -> Dict[str, Any]:
-        """Sync all database teams with SportDevs API and update external IDs"""
+        """Sync all database teams with ESPN API and update external IDs"""
         results = {
             "synced": [],
             "failed": [],
@@ -46,15 +46,15 @@ class DatabaseIntegrationService:
                 try:
                     logger.info(f"Processing team: {team.name}")
                     
-                    # Search for team in SportDevs
-                    api_team = await self.sportdevs.search_team(team.name)
+                    # Search for team in ESPN
+                    api_team = await self.espn.search_team(team.name)
                     
                     if api_team:
                         team_id = api_team.get("id")
                         
                         # Try to get matches to verify team is active
                         try:
-                            matches = await self.sportdevs.get_team_matches(team_id)
+                            matches = await self.espn.get_team_matches(team_id)
                             matches_count = len(matches) if matches else 0
                             
                             if matches_count > 0:
@@ -69,10 +69,10 @@ class DatabaseIntegrationService:
                             matches_count = 0
                             status = "found_matches_error"
                         
-                        # Update team with SportDevs data
+                        # Update team with ESPN data
                         metadata = {
-                            "sportdevs_id": team_id,
-                            "sportdevs_name": api_team.get("name"),
+                            "espn_id": team_id,
+                            "espn_name": api_team.get("name"),
                             "country": api_team.get("country"),
                             "founded": api_team.get("founded"),
                             "logo": api_team.get("logo"),
@@ -102,7 +102,7 @@ class DatabaseIntegrationService:
                         results["statistics"]["not_found"] += 1
                         results["failed"].append({
                             "team": team.name,
-                            "reason": "Not found in SportDevs API"
+                            "reason": "Not found in ESPN API"
                         })
                         logger.warning(f"❌ Not found: {team.name}")
                 
@@ -118,7 +118,7 @@ class DatabaseIntegrationService:
         return results
     
     async def create_events_from_matches(self, team_id: int, limit: int = 10) -> Dict[str, Any]:
-        """Create SportsEvent records from SportDevs matches for a specific team"""
+        """Create SportsEvent records from ESPN matches for a specific team"""
         results = {
             "created": [],
             "skipped": [],
@@ -126,8 +126,8 @@ class DatabaseIntegrationService:
         }
         
         try:
-            # Get team matches from SportDevs
-            matches = await self.sportdevs.get_team_matches(team_id)
+            # Get team matches from ESPN
+            matches = await self.espn.get_team_matches(team_id)
             
             if not matches:
                 return {**results, "message": f"No matches found for team ID {team_id}"}
@@ -153,7 +153,7 @@ class DatabaseIntegrationService:
                             select(SportsEvent).where(
                                 and_(
                                     SportsEvent.external_id == str(match.get("id")),
-                                    SportsEvent.source == "sportdevs"
+                                    SportsEvent.source == "espn"
                                 )
                             )
                         )
@@ -194,7 +194,7 @@ class DatabaseIntegrationService:
         return results
     
     def _parse_match_to_event(self, match: Dict[str, Any], team_id: int) -> Optional[Dict[str, Any]]:
-        """Parse SportDevs match data into SportsEvent format"""
+        """Parse ESPN match data into SportsEvent format"""
         try:
             match_id = match.get("id")
             start_time = match.get("start_time")
@@ -228,7 +228,7 @@ class DatabaseIntegrationService:
                 "home_team_id": 1,  # Default team ID - needs proper mapping
                 "away_team_id": 1,  # Default team ID - needs proper mapping
                 "external_id": str(match_id),
-                "source": "sportdevs",
+                "source": "espn",
                 "event_metadata": json.dumps({
                     "home_team": home_team,
                     "away_team": away_team,
@@ -246,7 +246,7 @@ class DatabaseIntegrationService:
             return None
     
     async def sync_events_for_all_teams(self, max_events_per_team: int = 5) -> Dict[str, Any]:
-        """Sync events for all teams that have SportDevs external IDs"""
+        """Sync events for all teams that have ESPN external IDs"""
         results = {
             "teams_processed": 0,
             "total_events_created": 0,
@@ -300,7 +300,7 @@ class DatabaseIntegrationService:
         return results
     
     async def get_integration_status(self) -> Dict[str, Any]:
-        """Get current integration status with SportDevs"""
+        """Get current integration status with ESPN"""
         async with async_session() as session:
             # Count teams
             total_teams = await session.execute(select(Team))
@@ -315,21 +315,21 @@ class DatabaseIntegrationService:
             total_events = await session.execute(select(SportsEvent))
             total_events_count = len(total_events.scalars().all())
             
-            sportdevs_events = await session.execute(
-                select(SportsEvent).where(SportsEvent.source == "sportdevs")
+            espn_events = await session.execute(
+                select(SportsEvent).where(SportsEvent.source == "espn")
             )
-            sportdevs_events_count = len(sportdevs_events.scalars().all())
+            espn_events_count = len(espn_events.scalars().all())
             
             return {
                 "teams": {
                     "total": total_teams_count,
-                    "synced_with_sportdevs": synced_teams_count,
+                    "synced_with_espn": synced_teams_count,
                     "sync_percentage": (synced_teams_count / total_teams_count * 100) if total_teams_count > 0 else 0
                 },
                 "events": {
                     "total": total_events_count,
-                    "from_sportdevs": sportdevs_events_count,
-                    "sportdevs_percentage": (sportdevs_events_count / total_events_count * 100) if total_events_count > 0 else 0
+                    "from_espn": espn_events_count,
+                    "espn_percentage": (espn_events_count / total_events_count * 100) if total_events_count > 0 else 0
                 },
                 "last_updated": datetime.now().isoformat()
             }

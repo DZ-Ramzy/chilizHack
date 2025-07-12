@@ -6,7 +6,7 @@ from typing import Dict, Any
 from datetime import datetime, timedelta
 from loguru import logger
 import os
-from .sportdevs_service import sportdevs_service
+from .espn_football_service import espn_football_service
 
 
 class EventScheduler:
@@ -65,7 +65,7 @@ class EventScheduler:
         
         try:
             # Full sync: teams + events + quest generation
-            # Use SportDevs service instead
+            # Use ESPN service instead
             from .database_integration import db_integration
             result = await db_integration.sync_teams_with_external_ids()
             
@@ -87,47 +87,26 @@ class EventScheduler:
         logger.info(f"Syncing events for team: {team_name}")
         
         try:
-            # Search team in SportDevs
-            team_data = await sportdevs_service.search_team(team_name)
+            # Search team in ESPN
+            team_data = await espn_football_service.search_team(team_name)
             if not team_data:
-                return {"error": f"Team '{team_name}' not found in SportDevs API"}
+                return {"error": f"Team '{team_name}' not found in ESPN API"}
             
             # Get team matches
-            matches = await sportdevs_service.get_team_matches(team_data.get("id", team_data.get("name", team_name)))
+            matches = await espn_football_service.get_team_matches(team_data.get("id", team_data.get("name", team_name)))
             
             # Create events from matches
             from .database_integration import db_integration
             create_result = await db_integration.create_events_from_matches(matches, team_data)
             
-            # Trigger quest generation for new events
-            from ..core.workflow_engine import sports_quest_workflow
-            
-            quest_results = []
-            for event_info in create_result["created_events"]:
-                try:
-                    workflow_event_data = {
-                        "event_id": f"thesportsdb_{event_info['thesportsdb_id']}",
-                        "title": event_info["title"],
-                        "home_team": event_info["title"].split(" vs ")[0],
-                        "away_team": event_info["title"].split(" vs ")[1],
-                        "event_date": event_info["date"],
-                        "sport": "football",
-                        "league": event_info["league"]
-                    }
-                    
-                    quest_result = await sports_quest_workflow.process_sports_event(workflow_event_data)
-                    quest_results.append(quest_result)
-                    
-                except Exception as e:
-                    logger.error(f"Failed to trigger quest for event {event_info['title']}: {e}")
+            # Quest generation would now be triggered manually via the /generate endpoint
+            logger.info(f"Events created for {team_name}. Use /api/quests/generate endpoint for quest creation.")
             
             return {
                 "team": team_name,
-                "thesportsdb_id": team_id,
-                "events_found": len(parsed_events),
                 "events_created": create_result["created"],
-                "quests_triggered": len(quest_results),
-                "created_events": create_result["created_events"]
+                "created_events": create_result["created_events"],
+                "message": "Use /api/quests/generate to create quests for these events"
             }
             
         except Exception as e:

@@ -32,6 +32,66 @@ async def check_team_exists(team_name: str) -> Dict[str, Any]:
         return {"exists": False}
 
 
+async def get_all_active_teams():
+    """Get all active teams in the database"""
+    async with async_session() as session:
+        stmt = select(Team).where(Team.is_active == True)
+        result = await session.execute(stmt)
+        teams = result.scalars().all()
+        
+        return [
+            {
+                "id": team.id,
+                "name": team.name,
+                "display_name": team.display_name,
+                "sport": team.sport,
+                "league": team.league,
+                "logo_url": team.logo_url,
+                "is_active": team.is_active
+            }
+            for team in teams
+        ]
+
+
+async def get_team_stats(team_id: int) -> Dict[str, Any]:
+    """Get team statistics for quest generation"""
+    async with async_session() as session:
+        stmt = select(Team).where(Team.id == team_id)
+        result = await session.execute(stmt)
+        team = result.scalar_one_or_none()
+        
+        if not team:
+            return {}
+            
+        # Simple mock stats (can be enhanced with real analytics)
+        return {
+            "fanbase_size": 1000,  # Mock value
+            "avg_engagement": 0.7,  # Mock value
+            "recent_activity": 100,  # Mock value
+            "clash_win_rate": 0.5   # Mock value
+        }
+
+
+async def get_community_stats() -> Dict[str, Any]:
+    """Get community-wide statistics"""
+    async with async_session() as session:
+        # Count active users
+        user_stmt = select(User)
+        user_result = await session.execute(user_stmt)
+        users = user_result.scalars().all()
+        
+        # Count active teams
+        team_stmt = select(Team).where(Team.is_active == True)
+        team_result = await session.execute(team_stmt)
+        teams = team_result.scalars().all()
+        
+        return {
+            "total_active_users": len(users),
+            "total_teams": len(teams),
+            "avg_engagement_rate": 0.6  # Mock value
+        }
+
+
 async def get_user_teams(user_id: int) -> List[Dict[str, Any]]:
     """Get all teams followed by a user"""
     async with async_session() as session:
@@ -64,37 +124,31 @@ async def create_quest(
     description: str,
     quest_type: str,
     team_id: int,
-    user_id: Optional[int] = None,
-    event_id: Optional[int] = None,
-    target_metric: Optional[str] = None,
-    target_value: Optional[int] = None,
-    metadata: Optional[Dict[str, Any]] = None
-) -> Dict[str, Any]:
+    user_id: int = 0,
+    event_id: int = 0,
+    target_metric: str = "posts",
+    target_value: int = 5,
+    metadata: str = ""
+):
     """Create a new quest"""
     async with async_session() as session:
         quest = Quest(
             title=title,
             description=description,
             quest_type=QuestType(quest_type),
-            user_id=user_id,
+            user_id=user_id if user_id > 0 else None,
             team_id=team_id,
-            event_id=event_id,
+            event_id=event_id if event_id > 0 else None,
             target_metric=target_metric,
             target_value=target_value,
-            metadata=json.dumps(metadata) if metadata else None
+            quest_metadata=metadata if metadata else None
         )
         
         session.add(quest)
         await session.commit()
         await session.refresh(quest)
         
-        return {
-            "quest_id": quest.id,
-            "title": quest.title,
-            "quest_type": quest.quest_type.value,
-            "status": quest.status.value,
-            "created": True
-        }
+        return quest.id
 
 
 async def get_active_events() -> List[Dict[str, Any]]:

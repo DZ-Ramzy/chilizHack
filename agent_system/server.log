@@ -1,10 +1,454 @@
-[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m92[0m - [1m🚀 Starting Sports Quest AI Backend[0m
-[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mvalidate_environment[0m:[36m61[0m - [1m✅ Environment validation passed[0m
-[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36minitialize_database[0m:[36m75[0m - [1m🗄️  Database found, skipping initialization[0m
-[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m106[0m - [1m🌐 Server configuration:[0m
-[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m107[0m - [1m   Host: 0.0.0.0[0m
-[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m108[0m - [1m   Port: 8001[0m
-[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m109[0m - [1m   Environment: development[0m
-[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m110[0m - [1m   Reload: True[0m
-[32m2025-07-11 23:02:38[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m116[0m - [1m🎯 Starting uvicorn server...[0m
-WARNING:  You must pass the application as an import string to enable 'reload' or 'workers'.
+INFO:     Will watch for changes in these directories: ['/home/kaizen/chilizHack/agent_system']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [109634] using StatReload
+INFO:     Started server process [109643]
+INFO:     Waiting for application startup.
+2025-07-12 04:10:45,327 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:10:45,327 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2025-07-12 04:10:45,328 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:10:45,329 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("teams")
+2025-07-12 04:10:45,329 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:10:45,330 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("quests")
+2025-07-12 04:10:45,330 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:10:45,331 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("sports_events")
+2025-07-12 04:10:45,331 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:10:45,332 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("user_teams")
+2025-07-12 04:10:45,332 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:10:45,333 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+2025-07-12 04:10:51,648 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:10:51,650 INFO sqlalchemy.engine.Engine SELECT 1
+2025-07-12 04:10:51,650 INFO sqlalchemy.engine.Engine [generated in 0.00034s] ()
+2025-07-12 04:10:51,651 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:57696 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57706 - "GET /api/quests/test/agent HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'src/ai_agents/__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [109643]
+INFO:     Started server process [110073]
+INFO:     Waiting for application startup.
+2025-07-12 04:12:05,230 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:12:05,230 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2025-07-12 04:12:05,230 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:12:05,232 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("teams")
+2025-07-12 04:12:05,232 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:12:05,233 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("quests")
+2025-07-12 04:12:05,234 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:12:05,235 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("sports_events")
+2025-07-12 04:12:05,235 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:12:05,236 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("user_teams")
+2025-07-12 04:12:05,236 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:12:05,238 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'src/ai_agents/__init__.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [110073]
+INFO:     Started server process [110655]
+INFO:     Waiting for application startup.
+2025-07-12 04:14:40,988 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:14:40,989 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2025-07-12 04:14:40,989 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:14:40,991 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("teams")
+2025-07-12 04:14:40,991 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:14:40,992 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("quests")
+2025-07-12 04:14:40,992 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:14:40,993 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("sports_events")
+2025-07-12 04:14:40,993 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:14:40,994 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("user_teams")
+2025-07-12 04:14:40,994 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:14:40,996 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'src/api/routes/quests.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [110655]
+INFO:     Started server process [110704]
+INFO:     Waiting for application startup.
+2025-07-12 04:14:51,360 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:14:51,360 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2025-07-12 04:14:51,361 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:14:51,362 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("teams")
+2025-07-12 04:14:51,362 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:14:51,363 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("quests")
+2025-07-12 04:14:51,363 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:14:51,364 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("sports_events")
+2025-07-12 04:14:51,364 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:14:51,365 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("user_teams")
+2025-07-12 04:14:51,365 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:14:51,366 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+2025-07-12 04:14:59,844 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:14:59,848 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:14:59,848 INFO sqlalchemy.engine.Engine [generated in 0.00042s] ('Support PSG on Social Media', 'Share 5 posts supporting PSG on social media', 'INDIVIDUAL', 'PENDING', None, 1, None, 'social_posts', 5, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:14:59,854 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:14:59,861 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:14:59,864 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:14:59,865 INFO sqlalchemy.engine.Engine [generated in 0.00034s] (1,)
+2025-07-12 04:14:59,868 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:46448 - "GET /api/quests/test/individual HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 324, in jsonable_encoder
+    data = dict(obj)
+           ^^^^^^^^^
+TypeError: 'builtin_function_or_method' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 329, in jsonable_encoder
+    data = vars(obj)
+           ^^^^^^^^^
+TypeError: vars() argument must have __dict__ attribute
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/kaizen/.local/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/applications.py", line 112, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/kaizen/.local/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/routing.py", line 328, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/routing.py", line 202, in serialize_response
+    return jsonable_encoder(response_content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 289, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 245, in jsonable_encoder
+    return jsonable_encoder(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 289, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 303, in jsonable_encoder
+    jsonable_encoder(
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 289, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 289, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 333, in jsonable_encoder
+    return jsonable_encoder(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 333, in jsonable_encoder
+    return jsonable_encoder(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 289, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 289, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 333, in jsonable_encoder
+    return jsonable_encoder(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 333, in jsonable_encoder
+    return jsonable_encoder(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 289, in jsonable_encoder
+    encoded_value = jsonable_encoder(
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/kaizen/.local/lib/python3.12/site-packages/fastapi/encoders.py", line 332, in jsonable_encoder
+    raise ValueError(errors) from e
+ValueError: [TypeError("'builtin_function_or_method' object is not iterable"), TypeError('vars() argument must have __dict__ attribute')]
+WARNING:  StatReload detected changes in 'src/api/routes/quests.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [110704]
+INFO:     Started server process [110833]
+INFO:     Waiting for application startup.
+2025-07-12 04:15:10,440 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:15:10,440 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2025-07-12 04:15:10,440 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:15:10,442 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("teams")
+2025-07-12 04:15:10,442 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:15:10,443 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("quests")
+2025-07-12 04:15:10,443 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:15:10,444 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("sports_events")
+2025-07-12 04:15:10,444 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:15:10,446 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("user_teams")
+2025-07-12 04:15:10,446 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:15:10,448 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+2025-07-12 04:15:16,522 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:15:16,524 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:15:16,525 INFO sqlalchemy.engine.Engine [generated in 0.00052s] ('Support PSG on Social Media', 'Share 5 posts supporting PSG on social media', 'INDIVIDUAL', 'PENDING', None, 1, None, 'social_posts', 5, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:15:16,527 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:15:16,534 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:15:16,537 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:15:16,537 INFO sqlalchemy.engine.Engine [generated in 0.00038s] (2,)
+2025-07-12 04:15:16,540 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:42460 - "GET /api/quests/test/individual HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'src/api/routes/quests.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [110833]
+INFO:     Started server process [111159]
+INFO:     Waiting for application startup.
+2025-07-12 04:16:37,461 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:16:37,462 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2025-07-12 04:16:37,462 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:16:37,467 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("teams")
+2025-07-12 04:16:37,468 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:16:37,470 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("quests")
+2025-07-12 04:16:37,470 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:16:37,471 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("sports_events")
+2025-07-12 04:16:37,471 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:16:37,472 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("user_teams")
+2025-07-12 04:16:37,473 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:16:37,474 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+2025-07-12 04:16:42,008 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:16:42,011 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:16:42,011 INFO sqlalchemy.engine.Engine [generated in 0.00038s] ('Support PSG on Social Media', 'Share 5 posts supporting PSG on social media', 'INDIVIDUAL', 'PENDING', None, 1, None, 'social_posts', 5, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:16:42,014 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:16:42,021 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:16:42,024 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:16:42,024 INFO sqlalchemy.engine.Engine [generated in 0.00034s] (3,)
+2025-07-12 04:16:42,027 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:41554 - "GET /api/quests/test/individual HTTP/1.1" 200 OK
+2025-07-12 04:16:51,971 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:16:51,972 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:16:51,972 INFO sqlalchemy.engine.Engine [cached since 9.962s ago] ('PSG vs Real Madrid Fan Battle - PSG Supporters', 'Support PSG in the epic battle against Real Madrid fans! Target: 50 social interactions', 'CLASH', 'PENDING', None, 1, None, 'social_interactions', 50, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:16:51,974 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:16:51,988 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:16:51,989 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:16:51,989 INFO sqlalchemy.engine.Engine [cached since 9.965s ago] (4,)
+2025-07-12 04:16:51,990 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-07-12 04:16:51,991 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:16:51,992 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:16:51,992 INFO sqlalchemy.engine.Engine [cached since 9.981s ago] ('PSG vs Real Madrid Fan Battle - Real Madrid Supporters', 'Support Real Madrid in the epic battle against PSG fans! Target: 50 social interactions', 'CLASH', 'PENDING', None, 2, None, 'social_interactions', 50, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:16:51,993 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:16:52,000 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:16:52,000 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:16:52,000 INFO sqlalchemy.engine.Engine [cached since 9.976s ago] (5,)
+2025-07-12 04:16:52,001 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:38578 - "GET /api/quests/test/clash HTTP/1.1" 200 OK
+2025-07-12 04:17:02,813 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:17:02,814 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:17:02,814 INFO sqlalchemy.engine.Engine [cached since 20.8s ago] ('Championship Final Community Celebration - PSG', 'Historic moment - unite all football fans | PSG contribution target: 3333', 'COLLECTIVE', 'PENDING', None, 1, None, 'community_actions', 3333, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:17:02,815 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:17:02,823 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:17:02,824 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:17:02,824 INFO sqlalchemy.engine.Engine [cached since 20.8s ago] (6,)
+2025-07-12 04:17:02,826 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-07-12 04:17:02,827 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:17:02,828 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:17:02,828 INFO sqlalchemy.engine.Engine [cached since 20.82s ago] ('Championship Final Community Celebration - Real Madrid', 'Historic moment - unite all football fans | Real Madrid contribution target: 3333', 'COLLECTIVE', 'PENDING', None, 2, None, 'community_actions', 3333, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:17:02,829 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:17:02,836 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:17:02,836 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:17:02,836 INFO sqlalchemy.engine.Engine [cached since 20.81s ago] (7,)
+2025-07-12 04:17:02,837 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-07-12 04:17:02,839 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:17:02,839 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:17:02,839 INFO sqlalchemy.engine.Engine [cached since 20.83s ago] ('Championship Final Community Celebration - Barcelona', 'Historic moment - unite all football fans | Barcelona contribution target: 3333', 'COLLECTIVE', 'PENDING', None, 3, None, 'community_actions', 3333, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:17:02,841 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:17:02,847 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:17:02,848 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:17:02,848 INFO sqlalchemy.engine.Engine [cached since 20.82s ago] (8,)
+2025-07-12 04:17:02,849 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:56986 - "GET /api/quests/test/collective HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57296 - "GET /api/quests/test/orchestrator HTTP/1.1" 200 OK
+2025-07-12 04:17:22,321 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:17:22,326 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests ORDER BY quests.created_at DESC
+ LIMIT ? OFFSET ?
+2025-07-12 04:17:22,327 INFO sqlalchemy.engine.Engine [generated in 0.00060s] (100, 0)
+2025-07-12 04:17:22,333 INFO sqlalchemy.engine.Engine SELECT teams.id AS teams_id, teams.name AS teams_name, teams.display_name AS teams_display_name, teams.sport AS teams_sport, teams.league AS teams_league, teams.country AS teams_country, teams.logo_url AS teams_logo_url, teams.is_active AS teams_is_active, teams.external_id AS teams_external_id, teams.team_metadata AS teams_team_metadata, teams.created_at AS teams_created_at, teams.updated_at AS teams_updated_at 
+FROM teams 
+WHERE teams.id IN (?, ?, ?)
+2025-07-12 04:17:22,333 INFO sqlalchemy.engine.Engine [generated in 0.00034s] (1, 2, 3)
+2025-07-12 04:17:22,335 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:58044 - "GET /api/quests/ HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'src/api/routes/quests.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [111159]
+INFO:     Started server process [111861]
+INFO:     Waiting for application startup.
+2025-07-12 04:18:42,712 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:18:42,712 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2025-07-12 04:18:42,713 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:18:42,715 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("teams")
+2025-07-12 04:18:42,715 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:18:42,716 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("quests")
+2025-07-12 04:18:42,716 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:18:42,717 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("sports_events")
+2025-07-12 04:18:42,717 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:18:42,718 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("user_teams")
+2025-07-12 04:18:42,718 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:18:42,719 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'src/api/routes/quests.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [111861]
+INFO:     Started server process [111972]
+INFO:     Waiting for application startup.
+2025-07-12 04:19:04,848 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:19:04,849 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2025-07-12 04:19:04,849 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:19:04,850 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("teams")
+2025-07-12 04:19:04,850 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:19:04,851 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("quests")
+2025-07-12 04:19:04,852 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:19:04,852 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("sports_events")
+2025-07-12 04:19:04,853 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:19:04,854 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("user_teams")
+2025-07-12 04:19:04,854 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-07-12 04:19:04,855 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+2025-07-12 04:19:14,502 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:19:14,505 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:19:14,505 INFO sqlalchemy.engine.Engine [generated in 0.00050s] ('Support PSG on Social Media', 'Share 5 posts supporting PSG on social media', 'INDIVIDUAL', 'PENDING', None, 1, None, 'social_posts', 5, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:19:14,508 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:19:14,517 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:19:14,520 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:19:14,520 INFO sqlalchemy.engine.Engine [generated in 0.00038s] (9,)
+2025-07-12 04:19:14,522 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:48886 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48896 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48896 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:48886 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:47414 - "GET /api/quests/test/individual HTTP/1.1" 200 OK
+2025-07-12 04:20:04,283 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:20:04,284 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:20:04,284 INFO sqlalchemy.engine.Engine [cached since 51.13s ago] ('PSG vs Real Madrid Fan Battle - PSG Supporters', 'Support PSG in the epic battle against Real Madrid fans! Target: 50 social interactions', 'CLASH', 'PENDING', None, 1, None, 'social_interactions', 50, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:20:04,286 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:20:04,292 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:20:04,292 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:20:04,292 INFO sqlalchemy.engine.Engine [cached since 51.12s ago] (10,)
+2025-07-12 04:20:04,293 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-07-12 04:20:04,294 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:20:04,295 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:20:04,295 INFO sqlalchemy.engine.Engine [cached since 51.14s ago] ('PSG vs Real Madrid Fan Battle - Real Madrid Supporters', 'Support Real Madrid in the epic battle against PSG fans! Target: 50 social interactions', 'CLASH', 'PENDING', None, 2, None, 'social_interactions', 50, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:20:04,296 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:20:04,301 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:20:04,302 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:20:04,302 INFO sqlalchemy.engine.Engine [cached since 51.13s ago] (11,)
+2025-07-12 04:20:04,303 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:48908 - "GET /docs HTTP/1.1" 200 OK
+/home/kaizen/.local/lib/python3.12/site-packages/fastapi/openapi/utils.py:246: UserWarning: Duplicate Operation ID check_team_exists_api_teams_exists__team_name__get for function check_team_exists at /home/kaizen/chilizHack/agent_system/src/api/routes/espn.py
+  warnings.warn(message, stacklevel=1)
+/home/kaizen/.local/lib/python3.12/site-packages/fastapi/openapi/utils.py:246: UserWarning: Duplicate Operation ID get_user_preferences_api_users__user_id__preferences_get for function get_user_preferences at /home/kaizen/chilizHack/agent_system/src/api/routes/espn.py
+  warnings.warn(message, stacklevel=1)
+/home/kaizen/.local/lib/python3.12/site-packages/fastapi/openapi/utils.py:246: UserWarning: Duplicate Operation ID update_user_preferences_api_users__user_id__preferences_put for function update_user_preferences at /home/kaizen/chilizHack/agent_system/src/api/routes/espn.py
+  warnings.warn(message, stacklevel=1)
+/home/kaizen/.local/lib/python3.12/site-packages/fastapi/openapi/utils.py:246: UserWarning: Duplicate Operation ID get_user_quests_api_quests__user_id__get for function get_user_quests at /home/kaizen/chilizHack/agent_system/src/api/routes/espn.py
+  warnings.warn(message, stacklevel=1)
+/home/kaizen/.local/lib/python3.12/site-packages/fastapi/openapi/utils.py:246: UserWarning: Duplicate Operation ID test_team_search_api_sync_test_team__team_name__get for function test_team_search at /home/kaizen/chilizHack/agent_system/src/api/routes/espn.py
+  warnings.warn(message, stacklevel=1)
+INFO:     127.0.0.1:48908 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60134 - "GET /api/quests/test/clash HTTP/1.1" 200 OK
+2025-07-12 04:20:07,369 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:20:07,370 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:20:07,370 INFO sqlalchemy.engine.Engine [cached since 54.22s ago] ('Championship Final Community Celebration - PSG', 'Historic moment - unite all football fans | PSG contribution target: 3333', 'COLLECTIVE', 'PENDING', None, 1, None, 'community_actions', 3333, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:20:07,389 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:20:07,395 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:20:07,396 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:20:07,396 INFO sqlalchemy.engine.Engine [cached since 54.23s ago] (12,)
+2025-07-12 04:20:07,397 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-07-12 04:20:07,399 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:20:07,399 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:20:07,399 INFO sqlalchemy.engine.Engine [cached since 54.25s ago] ('Championship Final Community Celebration - Real Madrid', 'Historic moment - unite all football fans | Real Madrid contribution target: 3333', 'COLLECTIVE', 'PENDING', None, 2, None, 'community_actions', 3333, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:20:07,402 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:20:07,407 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:20:07,407 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:20:07,408 INFO sqlalchemy.engine.Engine [cached since 54.24s ago] (13,)
+2025-07-12 04:20:07,409 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-07-12 04:20:07,410 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:20:07,410 INFO sqlalchemy.engine.Engine INSERT INTO quests (title, description, quest_type, status, user_id, team_id, event_id, target_metric, target_value, current_progress, start_time, end_time, updated_at, content_template, validation_rules, rewards, quest_metadata, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-07-12 04:20:07,410 INFO sqlalchemy.engine.Engine [cached since 54.26s ago] ('Championship Final Community Celebration - Barcelona', 'Historic moment - unite all football fans | Barcelona contribution target: 3333', 'COLLECTIVE', 'PENDING', None, 3, None, 'community_actions', 3333, 0, None, None, None, None, None, None, None, 1)
+2025-07-12 04:20:07,412 INFO sqlalchemy.engine.Engine COMMIT
+2025-07-12 04:20:07,418 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:20:07,419 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests 
+WHERE quests.id = ?
+2025-07-12 04:20:07,419 INFO sqlalchemy.engine.Engine [cached since 54.25s ago] (14,)
+2025-07-12 04:20:07,420 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:60158 - "GET /api/quests/test/collective HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58260 - "GET /api/quests/test/orchestrator HTTP/1.1" 200 OK
+2025-07-12 04:20:20,465 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-07-12 04:20:20,472 INFO sqlalchemy.engine.Engine SELECT quests.id, quests.title, quests.description, quests.quest_type, quests.status, quests.user_id, quests.team_id, quests.event_id, quests.target_metric, quests.target_value, quests.current_progress, quests.start_time, quests.end_time, quests.created_at, quests.updated_at, quests.content_template, quests.validation_rules, quests.rewards, quests.quest_metadata, quests.is_active 
+FROM quests ORDER BY quests.created_at DESC
+ LIMIT ? OFFSET ?
+2025-07-12 04:20:20,472 INFO sqlalchemy.engine.Engine [generated in 0.00066s] (100, 0)
+2025-07-12 04:20:20,483 INFO sqlalchemy.engine.Engine SELECT teams.id AS teams_id, teams.name AS teams_name, teams.display_name AS teams_display_name, teams.sport AS teams_sport, teams.league AS teams_league, teams.country AS teams_country, teams.logo_url AS teams_logo_url, teams.is_active AS teams_is_active, teams.external_id AS teams_external_id, teams.team_metadata AS teams_team_metadata, teams.created_at AS teams_created_at, teams.updated_at AS teams_updated_at 
+FROM teams 
+WHERE teams.id IN (?, ?, ?)
+2025-07-12 04:20:20,483 INFO sqlalchemy.engine.Engine [generated in 0.00082s] (1, 2, 3)
+2025-07-12 04:20:20,492 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:35144 - "GET /api/quests/ HTTP/1.1" 200 OK
