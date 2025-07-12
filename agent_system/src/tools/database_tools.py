@@ -123,7 +123,11 @@ async def create_quest(
     title: str,
     description: str,
     quest_type: str,
+<<<<<<< HEAD
     team_id: int = None,
+=======
+    team_id: int,
+>>>>>>> e97ca2b (feat: actual code)
     user_id: int = 0,
     event_id: int = 0,
     target_metric: str = "posts",

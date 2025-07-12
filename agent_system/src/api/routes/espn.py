@@ -242,7 +242,11 @@ async def test_team_matches(team_name: str) -> Dict[str, Any]:
             }
         
         # Get upcoming matches
+<<<<<<< HEAD
         matches = await espn_football_service.get_team_matches(team_name)
+=======
+        matches = await espn_football_service.get_team_matches(team["id"])
+>>>>>>> e97ca2b (feat: actual code)
         
         return {
             "found": True,
@@ -296,6 +300,7 @@ async def full_sync_and_quest_generation() -> Dict[str, Any]:
         return result
     except Exception as e:
         logger.error(f"Error in full sync: {e}")
+<<<<<<< HEAD
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -350,4 +355,6 @@ async def add_chelsea_team() -> Dict[str, Any]:
         
     except Exception as e:
         logger.error(f"Error adding Chelsea: {e}")
+=======
+>>>>>>> e97ca2b (feat: actual code)
         raise HTTPException(status_code=500, detail=str(e))

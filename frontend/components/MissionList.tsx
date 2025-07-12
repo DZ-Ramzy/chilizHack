@@ -23,6 +23,10 @@ export default function MissionList({ missions, onMissionClick }: MissionListPro
             />
           ))}
         </div>
+<<<<<<< HEAD
+=======
+        <button className='bg-white text-black px-4 py-2 rounded-lg'>Generate Missions</button>
+>>>>>>> e97ca2b (feat: actual code)
       </div>
     </div>
   );
