@@ -242,7 +242,7 @@ async def test_team_matches(team_name: str) -> Dict[str, Any]:
             }
         
         # Get upcoming matches
-        matches = await espn_football_service.get_team_matches(team["id"])
+        matches = await espn_football_service.get_team_matches(team_name)
         
         return {
             "found": True,
@@ -296,4 +296,58 @@ async def full_sync_and_quest_generation() -> Dict[str, Any]:
         return result
     except Exception as e:
         logger.error(f"Error in full sync: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/teams/add-chelsea")
+async def add_chelsea_team() -> Dict[str, Any]:
+    """Add Chelsea to the database"""
+    try:
+        from ...models.team import Team
+        from ...models.database import async_session
+        from sqlalchemy import select
+        
+        async with async_session() as session:
+            # Check if Chelsea already exists
+            existing_team = await session.execute(
+                select(Team).where(Team.name == "Chelsea")
+            )
+            existing = existing_team.scalar_one_or_none()
+            if existing:
+                return {
+                    "success": False,
+                    "message": "Chelsea already exists in database",
+                    "team_id": existing.id
+                }
+            
+            # Create Chelsea team
+            chelsea = Team(
+                name="Chelsea",
+                display_name="Chelsea FC",
+                sport="football",
+                league="Premier League",
+                country="England",
+                external_id="363",  # ESPN API ID
+                is_active=True
+            )
+            
+            session.add(chelsea)
+            await session.commit()
+            await session.refresh(chelsea)
+            
+            return {
+                "success": True,
+                "message": "Chelsea added successfully",
+                "team": {
+                    "id": chelsea.id,
+                    "name": chelsea.name,
+                    "display_name": chelsea.display_name,
+                    "sport": chelsea.sport,
+                    "league": chelsea.league,
+                    "external_id": chelsea.external_id
+                }
+            }
+        
+    except Exception as e:
+        logger.error(f"Error adding Chelsea: {e}")
         raise HTTPException(status_code=500, detail=str(e))

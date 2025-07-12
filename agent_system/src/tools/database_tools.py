@@ -123,7 +123,7 @@ async def create_quest(
     title: str,
     description: str,
     quest_type: str,
-    team_id: int,
+    team_id: int = None,
     user_id: int = 0,
     event_id: int = 0,
     target_metric: str = "posts",

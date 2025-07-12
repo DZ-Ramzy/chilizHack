@@ -54,6 +54,10 @@ app.include_router(events.router, prefix="/api/events", tags=["events"])
 app.include_router(sync.router, prefix="/api/sync", tags=["sync"])
 app.include_router(espn.router, tags=["espn"])
 
+# New simple quest generation
+from .routes import new_quest_generation
+app.include_router(new_quest_generation.router, prefix="/api/quests/new", tags=["new-quests"])
+
 
 @app.get("/")
 async def root():

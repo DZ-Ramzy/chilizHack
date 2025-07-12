@@ -23,7 +23,11 @@ class ESPNFootballService:
             "La Liga": "esp.1",
             "Ligue 1": "fra.1", 
             "Premier League": "eng.1",
-            "Bundesliga": "ger.1"
+            "Bundesliga": "ger.1",
+            "Champions League": "uefa.champions",
+            "Europa League": "uefa.europa",
+            "Club World Cup": "fifa.cwc",
+            "International Friendlies": "fifa.friendly"
         }
         # Team mappings to ESPN IDs
         self.team_mappings = {
@@ -31,7 +35,8 @@ class ESPNFootballService:
             "Barcelona": {"league": "esp.1", "id": "83"},
             "PSG": {"league": "fra.1", "id": "160"},
             "Manchester United": {"league": "eng.1", "id": "360"},
-            "Bayern Munich": {"league": "ger.1", "id": "132"}
+            "Bayern Munich": {"league": "ger.1", "id": "132"},
+            "Chelsea": {"league": "eng.1", "id": "363"}
         }
         
     async def _make_request(self, endpoint: str) -> Dict[str, Any]:
@@ -101,31 +106,41 @@ class ESPNFootballService:
         return None
     
     async def get_team_matches(self, team_name: str) -> List[Dict[str, Any]]:
-        """Get matches for a team"""
+        """Get matches for a team across ALL competitions"""
         team_mapping = self.team_mappings.get(team_name)
         if not team_mapping:
             return []
-            
-        league = team_mapping["league"]
-        
-        # Get scoreboard data for the league
-        data = await self._make_request(f"{league}/scoreboard")
         
         matches = []
-        if data and "events" in data:
-            for event in data["events"]:
-                # Check if our team is involved
-                competitors = event.get("competitions", [{}])[0].get("competitors", [])
-                team_involved = False
+        
+        # Search in ALL leagues/competitions for this team
+        for league_name, league_code in self.league_mappings.items():
+            try:
+                # Get scoreboard data for each league
+                data = await self._make_request(f"{league_code}/scoreboard")
                 
-                for competitor in competitors:
-                    team = competitor.get("team", {})
-                    if team.get("displayName") == team_name or team.get("id") == team_mapping["id"]:
-                        team_involved = True
-                        break
-                
-                if team_involved:
-                    matches.append(self._parse_espn_event(event))
+                if data and "events" in data:
+                    for event in data["events"]:
+                        # Check if our team is involved
+                        competitors = event.get("competitions", [{}])[0].get("competitors", [])
+                        team_involved = False
+                        
+                        for competitor in competitors:
+                            team = competitor.get("team", {})
+                            if team.get("displayName") == team_name or team.get("id") == team_mapping["id"]:
+                                team_involved = True
+                                break
+                        
+                        if team_involved:
+                            # Add league info to the match
+                            match_data = self._parse_espn_event(event)
+                            match_data["league"] = league_name
+                            match_data["league_code"] = league_code
+                            matches.append(match_data)
+                            
+            except Exception as e:
+                logger.warning(f"Error checking {league_name} for {team_name}: {e}")
+                continue
         
         return matches
     
