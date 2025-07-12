@@ -52,7 +52,7 @@ export default function MainPage() {
         backgroundPosition: 'center',
       }}
     >
-      <div className='w-full h-full bg-black/70 flex flex-col justify-between min-h-screen pt-4'>
+      <div className='w-full h-full bg-black/65 flex flex-col justify-between min-h-screen pt-4'>
         <div className='grow flex flex-col gap-4 px-4'>
           <Header 
             authenticated={authenticated} 

@@ -1,6 +1,6 @@
 export default function ScrollingBanner() {
   return (
-    <div className="bg-black/20 py-2 w-full overflow-hidden">
+    <div className=" py-2 w-full overflow-hidden">
       <div
         style={{
           display: 'inline-block',
