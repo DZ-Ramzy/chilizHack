@@ -452,7 +452,6 @@ WHERE teams.id IN (?, ?, ?)
 2025-07-12 04:20:20,483 INFO sqlalchemy.engine.Engine [generated in 0.00082s] (1, 2, 3)
 2025-07-12 04:20:20,492 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:     127.0.0.1:35144 - "GET /api/quests/ HTTP/1.1" 200 OK
-<<<<<<< HEAD
 INFO:     127.0.0.1:60752 - "GET /docs HTTP/1.1" 200 OK
 INFO:     127.0.0.1:60752 - "GET /openapi.json HTTP/1.1" 200 OK
 2025-07-12 07:52:26,524 INFO sqlalchemy.engine.Engine BEGIN (implicit)
@@ -963,5 +962,3 @@ INFO:     Waiting for application startup.
 2025-07-12 12:49:03,021 INFO sqlalchemy.engine.Engine [raw sql] ()
 2025-07-12 12:49:03,023 INFO sqlalchemy.engine.Engine COMMIT
 INFO:     Application startup complete.
-=======
->>>>>>> e97ca2b (feat: actual code)

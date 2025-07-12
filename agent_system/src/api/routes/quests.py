@@ -13,7 +13,6 @@ from ...models.quest import Quest, QuestType, QuestStatus
 from ...models.team import Team
 from ...models.user import User
 import json
-<<<<<<< HEAD
 from loguru import logger
 
 router = APIRouter()
@@ -21,11 +20,6 @@ router = APIRouter()
 # Include ultra-simple generation
 from .simple_quest_generation import router as simple_router
 
-=======
-
-router = APIRouter()
-
->>>>>>> e97ca2b (feat: actual code)
 
 class QuestResponse(BaseModel):
     id: int
@@ -89,13 +83,8 @@ async def get_all_quests(
                 "description": quest.description,
                 "quest_type": quest.quest_type.value,
                 "status": quest.status.value,
-<<<<<<< HEAD
                 "team_name": quest.team.name if quest.team else "Unknown Team",
                 "team_id": quest.team.id if quest.team else quest.team_id,
-=======
-                "team_name": quest.team.name,
-                "team_id": quest.team.id,
->>>>>>> e97ca2b (feat: actual code)
                 "user_id": quest.user_id,
                 "target_metric": quest.target_metric,
                 "target_value": quest.target_value,
@@ -163,11 +152,7 @@ async def get_user_quests(
                 "description": quest.description,
                 "quest_type": quest.quest_type.value,
                 "status": quest.status.value,
-<<<<<<< HEAD
                 "team_name": quest.team.name if quest.team else "Unknown Team",
-=======
-                "team_name": quest.team.name,
->>>>>>> e97ca2b (feat: actual code)
                 "target_metric": quest.target_metric,
                 "target_value": quest.target_value,
                 "current_progress": quest.current_progress,
@@ -270,7 +255,6 @@ async def test_collective_agent(db: AsyncSession = Depends(get_db)):
         return {"success": False, "error": str(e), "traceback": traceback.format_exc()}
 
 
-<<<<<<< HEAD
 @router.get("/test/research")
 async def test_research_orchestrator(db: AsyncSession = Depends(get_db)):
     """Test football research orchestrator with sub-agents"""
@@ -294,8 +278,6 @@ async def test_research_orchestrator(db: AsyncSession = Depends(get_db)):
         return {"success": False, "error": str(e), "traceback": traceback.format_exc()}
 
 
-=======
->>>>>>> e97ca2b (feat: actual code)
 @router.get("/test/orchestrator")
 async def test_orchestrator_agent(db: AsyncSession = Depends(get_db)):
     """Test quest orchestrator agent"""
@@ -319,7 +301,6 @@ async def test_orchestrator_agent(db: AsyncSession = Depends(get_db)):
         return {"success": False, "error": str(e), "traceback": traceback.format_exc()}
 
 
-<<<<<<< HEAD
 @router.delete("/purge")
 async def purge_all_quests(db: AsyncSession = Depends(get_db)):
     """Purge all existing quests from database"""
@@ -681,27 +662,10 @@ async def generate_all_quests(db: AsyncSession = Depends(get_db)):
                     "player_news": len(context.player_news),
                     "community": len(context.community_trends)
                 }
-=======
-@router.get("/generate/all")
-async def generate_all_quests(db: AsyncSession = Depends(get_db)):
-    """Generate multiple quests for all active teams with Individual, Clash, and Collective types"""
-    try:
-        from ...tools.database_tools import get_all_active_teams
-        
-        # Get all active teams first
-        all_teams = await get_all_active_teams()
-        
-        if not all_teams:
-            return {
-                "success": False,
-                "message": "No active teams found",
-                "total_quests_created": 0
->>>>>>> e97ca2b (feat: actual code)
             }
         
         return {
             "success": True,
-<<<<<<< HEAD
             "architecture": "optimized_centralized_research",
             "total_teams_found": len(all_teams),
             "teams": all_teams,
@@ -718,14 +682,6 @@ async def generate_all_quests(db: AsyncSession = Depends(get_db)):
         
     except Exception as e:
         logger.error(f"❌ Error in optimized quest generation: {e}")
-=======
-            "total_teams_found": len(all_teams),
-            "teams": all_teams,
-            "message": "Found teams, agents disabled for testing"
-        }
-        
-    except Exception as e:
->>>>>>> e97ca2b (feat: actual code)
         raise HTTPException(status_code=500, detail=str(e))
 
 
