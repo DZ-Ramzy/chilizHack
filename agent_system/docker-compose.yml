@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  sports-quest-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:8000"
+    environment:
+      - ENVIRONMENT=production
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - LOG_LEVEL=INFO
+      # Add your API keys here or use .env file
+      # - SPORTDEVS_API_KEY=your_api_key_here
+    env_file:
+      - .env
+    volumes:
+      # Persist database
+      - ./sports_quest.db:/app/sports_quest.db
+      # Persist logs
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - sports-quest-network
+
+networks:
+  sports-quest-network:
+    driver: bridge
