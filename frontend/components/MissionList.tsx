@@ -1,18 +1,10 @@
-import { MissionType } from '../types/mission';
-import Mission from './Mission';
 import { useState } from 'react';
+import type { MissionType } from '@/types/mission';
 
 interface MissionListProps {
-  missions: Array<{
-    id: number;
-    title: string;
-    description: string;
-    difficulty: string;
-    xp_reward: number;
-    points_reward: number;
-  }>;
-  onMissionClick: (mission: any) => void;
-  onMissionsUpdate: (missions: any[]) => void;
+  missions: MissionType[];
+  onMissionClick: (mission: MissionType) => void;
+  onMissionsUpdate: (missions: MissionType[]) => void;
 }
 
 export default function MissionList({ missions, onMissionClick, onMissionsUpdate }: MissionListProps) {
@@ -38,7 +30,6 @@ export default function MissionList({ missions, onMissionClick, onMissionsUpdate
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
         <h2 className="col-span-full text-2xl font-bold text-white mb-4">Individual Missions</h2>
-        {/* Individual missions first */}
         {missions
           .filter(mission => mission.quest_type === 'individual')
           .map((mission) => (
@@ -60,7 +51,6 @@ export default function MissionList({ missions, onMissionClick, onMissionsUpdate
         ))}
 
         <h2 className="col-span-full text-2xl font-bold text-white mb-4 mt-8">Other Missions</h2>
-        {/* Other missions */}
         {missions
           .filter(mission => mission.quest_type !== 'individual')
           .map((mission) => (
