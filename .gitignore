@@ -1,1 +1,3 @@
 agent_system/.env
+.env
+./agent_system/sports_quest.db
