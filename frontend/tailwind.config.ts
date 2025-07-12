@@ -7,11 +7,6 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-<<<<<<< HEAD
-    extend: {},
-  },
-  plugins: [],
-=======
     extend: {
       animation: {
         marquee: 'marquee var(--duration, 40s) linear infinite',
@@ -26,7 +21,6 @@ const config: Config = {
   },
   plugins: [],
   darkMode: 'class',
->>>>>>> e97ca2b (feat: actual code)
 }
 
 export default config 

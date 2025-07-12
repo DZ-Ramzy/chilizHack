@@ -3,11 +3,8 @@
 import Link from 'next/link';
 import { usePrivy } from '@privy-io/react-auth';
 import Navbar from '../components/Navbar';
-<<<<<<< HEAD
-=======
 import Reviews from '../components/Reviews';
 import { Instagram } from 'lucide-react';
->>>>>>> e97ca2b (feat: actual code)
 
 export default function HomePage() {
   const { authenticated, login } = usePrivy();
@@ -49,22 +46,14 @@ export default function HomePage() {
                   {authenticated ? (
                     <Link
                       href="/main"
-<<<<<<< HEAD
-                      className="inline-flex items-center text-sm font-medium text-gray-900 hover:text-gray-700 bg-black text-white px-4 py-2 rounded-lg"
-=======
                       className="inline-flex items-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white bg-black text-white px-4 py-2 rounded-lg"
->>>>>>> e97ca2b (feat: actual code)
                     >
                       Get Started <span className="ml-2">→</span>
                     </Link>
                   ) : (
                     <button
                       onClick={login}
-<<<<<<< HEAD
-                      className="inline-flex items-center text-sm font-medium text-gray-900 hover:text-gray-700 bg-black text-white px-4 py-2 rounded-lg"
-=======
                       className="inline-flex items-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white bg-black text-white px-4 py-2 rounded-lg"
->>>>>>> e97ca2b (feat: actual code)
                     >
                       Get Started <span className="ml-2">→</span>
                     </button>
@@ -80,9 +69,6 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-<<<<<<< HEAD
-        </div>
-=======
           <div className="py-32">
             <Reviews />
           </div>
@@ -94,7 +80,6 @@ export default function HomePage() {
               <Instagram className='w-10 h-10 text-white' />
             </div>
           </div>
->>>>>>> e97ca2b (feat: actual code)
       </main>
     </div>
   );
