@@ -1,7 +1,6 @@
 "use client"
 
 import React from 'react';
-import { usePrivy } from '@privy-io/react-auth';
 import Navbar from '../../components/Navbar';
 
 type LeaderboardEntry = {

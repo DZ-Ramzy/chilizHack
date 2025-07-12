@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState } from 'react';
-import { usePrivy } from '@privy-io/react-auth';
 import { MissionType } from '../../types/mission';
 import Navbar from '../../components/Navbar';
 import MissionList from '../../components/MissionList';
@@ -9,7 +8,6 @@ import MissionDetail from '../../components/MissionDetail';
 import ScrollingBanner from '../../components/ScrollingBanner';
 
 export default function MainPage() {
-  const { authenticated, user } = usePrivy();
   const [selectedMission, setSelectedMission] = useState<MissionType | null>(null);
 
   const missions = [
