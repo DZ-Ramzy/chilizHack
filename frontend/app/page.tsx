@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePrivy } from '@privy-io/react-auth';
+import Navbar from '../components/Navbar';
 
 export default function HomePage() {
   const { authenticated, login } = usePrivy();
@@ -15,29 +16,8 @@ export default function HomePage() {
           backgroundSize: '24px 24px'
         }}></div>
       </div>
-      {/* Navigation */}
-      <nav className="relative z-10 px-6 py-6">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="text-xl font-medium text-gray-900">Chiliz Quest</div>
-          <div className="flex items-center gap-8">
-            {authenticated ? (
-              <Link 
-                href="/dashboard"
-                className="px-4 py-2 rounded-lg bg-black text-white hover:bg-gray-800 transition-colors"
-              >
-                Dashboard
-              </Link>
-            ) : (
-              <button
-                onClick={login}
-                className="px-4 py-2 rounded-lg bg-black text-white hover:bg-gray-800 transition-colors"
-              >
-                Connect Wallet
-              </button>
-            )}
-          </div>
-        </div>
-      </nav>
+      
+      <Navbar />
 
       {/* Main Content */}
       <main className="relative">
@@ -83,7 +63,6 @@ export default function HomePage() {
             {/* Right Content - Purple Rectangle */}
             <div className="w-1/2 relative">
               <div className="absolute inset-0 bg-[#F0F0FF] rounded-l-3xl">
-                {/* Add some subtle decoration */}
                 <img src="/scan.jpeg" alt="scan" className="w-full h-full object-cover" />
               </div>
             </div>

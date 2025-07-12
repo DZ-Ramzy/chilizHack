@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 import { MissionType } from '../../types/mission';
-import Header from '../../components/Header';
+import Navbar from '../../components/Navbar';
 import MissionList from '../../components/MissionList';
 import MissionDetail from '../../components/MissionDetail';
 import ScrollingBanner from '../../components/ScrollingBanner';
@@ -52,12 +52,9 @@ export default function MainPage() {
         backgroundPosition: 'center',
       }}
     >
-      <div className='w-full h-full bg-black/65 flex flex-col justify-between min-h-screen pt-4'>
+      <div className='w-full h-full bg-black/65 flex flex-col justify-between min-h-screen'>
         <div className='grow flex flex-col gap-4 px-4'>
-          <Header 
-            authenticated={authenticated} 
-            userAddress={user?.wallet?.address}
-          />
+          <Navbar theme="dark" />
 
           {selectedMission ? (
             <MissionDetail 

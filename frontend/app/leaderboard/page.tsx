@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { usePrivy } from '@privy-io/react-auth';
-import Header from '../../components/Header';
-import ScrollingBanner from '../../components/ScrollingBanner';
+import Navbar from '../../components/Navbar';
 
 type LeaderboardEntry = {
   rank: number;
@@ -12,7 +11,6 @@ type LeaderboardEntry = {
   completedMissions: number;
 };
 
-// Exemple de données (à remplacer par des données réelles plus tard)
 const leaderboardData: LeaderboardEntry[] = [
   { rank: 1, address: "0x1234...5678", points: 1500, completedMissions: 12 },
   { rank: 2, address: "0x8765...4321", points: 1200, completedMissions: 10 },
@@ -22,73 +20,71 @@ const leaderboardData: LeaderboardEntry[] = [
 ];
 
 export default function LeaderboardPage() {
-  const { authenticated, user } = usePrivy();
-
   return (
-    <div 
-      className="absolute top-0 left-0 w-full z-0" 
-      style={{
-        backgroundImage: 'url(/bg.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-      <div className='w-full h-full bg-black/70 flex flex-col justify-between min-h-screen pt-4'>
-        <div className='grow flex flex-col gap-4 px-4'>
-          <Header 
-            authenticated={authenticated} 
-            userAddress={user?.wallet?.address}
-          />
+    <div className="min-h-screen w-full relative bg-white">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'radial-gradient(#E2E2FF 1px, transparent 1px)',
+          backgroundSize: '24px 24px'
+        }}></div>
+      </div>
 
-          <div className="max-w-4xl mx-auto w-full">
-            <div className="bg-black/40 backdrop-blur-md rounded-3xl p-8 border border-white/10">
-              <h2 className="text-3xl font-bold text-white mb-8 text-center bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
-                Leaderboard
-              </h2>
+      <Navbar />
 
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="text-white/80 border-b border-white/10">
-                      <th className="py-4 px-6 text-left">Rank</th>
-                      <th className="py-4 px-6 text-left">Address</th>
-                      <th className="py-4 px-6 text-right">Points</th>
-                      <th className="py-4 px-6 text-right">Missions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {leaderboardData.map((entry) => (
-                      <tr 
-                        key={entry.address}
-                        className="text-white/90 border-b border-white/5 hover:bg-white/5 transition-colors"
-                      >
-                        <td className="py-4 px-6">
-                          <span className={`
-                            inline-flex items-center justify-center w-8 h-8 rounded-full 
-                            ${entry.rank === 1 ? 'bg-yellow-500' : 
-                              entry.rank === 2 ? 'bg-gray-300' :
-                              entry.rank === 3 ? 'bg-amber-700' : 'bg-white/10'}
-                            font-bold
-                          `}>
-                            {entry.rank}
-                          </span>
-                        </td>
-                        <td className="py-4 px-6 font-mono">{entry.address}</td>
-                        <td className="py-4 px-6 text-right font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
-                          {entry.points}
-                        </td>
-                        <td className="py-4 px-6 text-right">{entry.completedMissions}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+      {/* Main Content */}
+      <main className="relative z-10 max-w-7xl mx-auto px-6 py-12">
+        <div className="mb-2 inline-block">
+          <span className="text-sm font-medium bg-purple-100 text-purple-800 px-3 py-1 rounded-full">
+            Top Players
+          </span>
+        </div>
+        
+        <h1 className="text-5xl font-light text-gray-900 mb-8">
+          <span className="font-bold">Leaderboard</span> Rankings
+        </h1>
+
+        <div className="bg-white shadow-lg rounded-2xl border border-gray-100">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="py-4 px-6 text-left text-sm font-medium text-gray-500">Rank</th>
+                  <th className="py-4 px-6 text-left text-sm font-medium text-gray-500">Address</th>
+                  <th className="py-4 px-6 text-right text-sm font-medium text-gray-500">Points</th>
+                  <th className="py-4 px-6 text-right text-sm font-medium text-gray-500">Missions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leaderboardData.map((entry) => (
+                  <tr 
+                    key={entry.address}
+                    className="border-t border-gray-100 hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="py-4 px-6">
+                      <span className={`
+                        inline-flex items-center justify-center w-8 h-8 rounded-full 
+                        ${entry.rank === 1 ? 'bg-yellow-100 text-yellow-800' : 
+                          entry.rank === 2 ? 'bg-gray-100 text-gray-800' :
+                          entry.rank === 3 ? 'bg-amber-100 text-amber-800' : 
+                          'bg-purple-100 text-purple-800'}
+                        font-bold text-sm
+                      `}>
+                        {entry.rank}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 font-mono text-gray-900">{entry.address}</td>
+                    <td className="py-4 px-6 text-right font-bold text-purple-600">
+                      {entry.points}
+                    </td>
+                    <td className="py-4 px-6 text-right text-gray-600">{entry.completedMissions}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-
-        <ScrollingBanner />
-      </div>
+      </main>
     </div>
   );
 } 
