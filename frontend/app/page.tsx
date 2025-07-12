@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { usePrivy } from '@privy-io/react-auth';
-import Image from 'next/image';
 
 export default function HomePage() {
   const { authenticated, login } = usePrivy();
