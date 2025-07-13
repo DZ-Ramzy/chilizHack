@@ -13,7 +13,7 @@ export default function MissionList({ missions, onMissionClick, onMissionsUpdate
   const handleGenerateMissions = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/quests/generate/all');
+      const response = await fetch('http://cors-anywhere.herokuapp.com/http://89.117.55.209:3001/api/quests/generate/all'); //'http://localhost:8000/api/quests/generate/all');
       if (!response.ok) {
         throw new Error('Failed to generate missions');
       }

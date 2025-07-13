@@ -1,4 +1,6 @@
 import { MissionType } from '../types/mission';
+import { usePrivy } from '@privy-io/react-auth';
+import { useState } from 'react';
 
 interface MissionDetailProps {
   mission: MissionType;
@@ -6,6 +8,45 @@ interface MissionDetailProps {
 }
 
 export default function MissionDetail({ mission, onBack }: MissionDetailProps) {
+  const { user } = usePrivy();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleMissionAction = async () => {
+    if (!user?.id) {
+      alert('Please connect your wallet first');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/missions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          missionId: mission.id,
+          action: mission.status === 'pending' ? 'start' : 'complete',
+          xpReward: mission.xp_reward,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to process mission action');
+      }
+
+      // You might want to refresh the mission data or update the UI here
+      alert(data.message);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to process mission action');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white/10 rounded-lg">
       <button 
@@ -65,13 +106,11 @@ export default function MissionDetail({ mission, onBack }: MissionDetailProps) {
       )}
 
       <button 
-        className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition-colors"
-        onClick={() => {
-          // TODO: Implement mission start/completion logic
-          alert('Mission action - to be implemented');
-        }}
+        className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        onClick={handleMissionAction}
+        disabled={isLoading}
       >
-        {mission.status === 'pending' ? 'Start Mission' : 'Complete Mission'}
+        {isLoading ? 'Processing...' : mission.status === 'pending' ? 'Start Mission' : 'Complete Mission'}
       </button>
     </div>
   );

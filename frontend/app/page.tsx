@@ -7,7 +7,7 @@ import Reviews from '../components/Reviews';
 import { Instagram } from 'lucide-react';
 
 export default function HomePage() {
-  const { authenticated, login } = usePrivy();
+  const { authenticated, login, user } = usePrivy();
 
   return (
     <div className="min-h-screen w-full relative bg-white">
@@ -45,7 +45,7 @@ export default function HomePage() {
                 <div className="flex-1">
                   {authenticated ? (
                     <Link
-                      href="/main"
+                      href={user?.customMetadata?.xp === 0 ? "/onboarding" : "/main"}
                       className="inline-flex items-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white bg-black text-white px-4 py-2 rounded-lg"
                     >
                       Get Started <span className="ml-2">→</span>

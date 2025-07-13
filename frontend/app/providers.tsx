@@ -2,7 +2,7 @@
 
 import { PrivyProvider } from '@privy-io/react-auth';
 import { PropsWithChildren } from 'react';
-import { mainnet } from 'wagmi/chains';
+import { chiliz } from 'wagmi/chains';
 
 export default function Providers({ children }: PropsWithChildren) {
   return (
@@ -15,8 +15,8 @@ export default function Providers({ children }: PropsWithChildren) {
           accentColor: '#000000',
           showWalletLoginFirst: true,
         },
-        defaultChain: mainnet,
-        supportedChains: [mainnet],
+        defaultChain: chiliz,
+        supportedChains: [chiliz],
       }}
     >
       {children}

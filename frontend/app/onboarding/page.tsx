@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { usePrivy } from '@privy-io/react-auth';
 
 interface Team {
   id: number;
@@ -17,14 +16,12 @@ interface Team {
 export default function OnboardingPage() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { user } = usePrivy();
 
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await fetch('http://localhost:8001/api/teams');
+        const response = await fetch('http://cors-anywhere.herokuapp.com/http://89.117.55.209:3001/api/teams/'); //'http://localhost:8001/api/teams');
         const data = await response.json();
         setTeams(data);
       } catch (error) {
@@ -45,41 +42,9 @@ export default function OnboardingPage() {
     });
   };
 
-  const handleContinue = async () => {
-    if (selectedTeams.length > 0 && user?.wallet?.address) {
-      setIsLoading(true);
-      try {
-        const response = await fetch('http://localhost:8001/api/users/register/blockchain', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            address: user.wallet.address,
-            favorite_teams: selectedTeams,
-          }),
-        });
-
-        const data = await response.json();
-        
-        // Check for user exists error in both 400 and 500 responses
-        if (data.already_exists) {
-          router.push('/main');
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error('Registration failed');
-        }
-
-        console.log('Registration successful:', data);
-        router.push('/main');
-      } catch (error) {
-        console.error('Error during registration:', error);
-        // You might want to show an error message to the user here
-      } finally {
-        setIsLoading(false);
-      }
+  const handleContinue = () => {
+    if (selectedTeams.length > 0) {
+      router.push('/main');
     }
   };
 
@@ -146,14 +111,14 @@ export default function OnboardingPage() {
             <div className="flex justify-center">
               <button
                 onClick={handleContinue}
-                disabled={selectedTeams.length === 0 || isLoading}
+                disabled={selectedTeams.length === 0}
                 className={`px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 ${
-                  selectedTeams.length > 0 && !isLoading
+                  selectedTeams.length > 0
                     ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white hover:scale-105'
                     : 'bg-gray-500/50 text-white/50 cursor-not-allowed'
                 }`}
               >
-                {isLoading ? 'Saving...' : 'Continue'}
+                Continue
               </button>
             </div>
           </div>
