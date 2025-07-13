@@ -51,7 +51,7 @@ export default function MainPage() {
   useEffect(() => {
     const fetchMissions = async () => {
       try {
-        const response = await fetch('http://cors-anywhere.herokuapp.com/http://89.117.55.209:3001/api/quests/?skip=0&limit=100'); //'http://localhost:8000/api/quests/?skip=0&limit=100'); //'https://89.117.55.209:3443/api/quests/?skip=0&limit=100');
+        const response = await fetch('https://cors-anywhere.herokuapp.com/http://89.117.55.209:3001/api/quests/?skip=0&limit=100'); //'http://localhost:8000/api/quests/?skip=0&limit=100'); //'https://89.117.55.209:3443/api/quests/?skip=0&limit=100');
         if (!response.ok) {
           throw new Error('Failed to fetch missions');
         }
