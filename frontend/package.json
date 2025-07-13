@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@privy-io/react-auth": "^2.18.0",
+    "@privy-io/server-auth": "^1.28.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "ethers": "^6.15.0",
