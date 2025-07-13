@@ -2,7 +2,7 @@
 
 A comprehensive sports quest and rewards platform built on the Chiliz blockchain, featuring AI-powered mission generation, smart contract rewards, and fan engagement tools.
 
-## 🏗️ Architecture
+## Architecture
 
 This project consists of three main components:
 
